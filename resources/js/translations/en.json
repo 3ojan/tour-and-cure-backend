@@ -1,0 +1,48 @@
+{
+  "translation": {
+    "globals": {
+      "requestTypes": {
+        "dental": "Dental",
+        "fillers": "Fillers"
+      },
+      "done": "Done",
+      "submit": "Submit"
+    },
+    "errors": {
+      "genericErrorMessage": "Something went wrong",
+      "emailRegex": "This doesn't look like a real email !",
+      "passwordLength": "Password should be at least 8 characters long"
+    },
+    "home": {
+      "screenTitle": "Dashboard"
+    },
+    "requests": {
+      "screenTitle": "Ongoing Request"
+    },
+    "newRequest": {
+      "screenTitle": "New Request",
+      "formTitle": {
+        "DENTAL": "Dental request",
+        "FILLER": "Filler request",
+        "PLASTIC": "Plastic surgery request"
+      }
+    },
+    "account": {
+      "screenTitle": "Account",
+      "logout": "Logout"
+    },
+    "login": {
+      "screenTitle": "Login"
+    },
+    "auth": {
+      "loginTitle": "Login with email and password",
+      "emailPlaceholder": "Email",
+      "passwordPlaceholder": "Password",
+      "submitLogin": "Submit",
+      "submitRegister": "Submit",
+      "register": "Register",
+      "registerTitle": "Register with email and password",
+      "login": "Login"
+    }
+  }
+}
