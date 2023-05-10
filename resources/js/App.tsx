@@ -16,11 +16,11 @@ function App(props: AppProps): ReactElement {
   // getRequestsInProgress()
   return (
     <div style={{ display: 'flex', height: '100%' }}>
-      <Provider store={store}>
+      {/* <Provider store={store}>
         <Router>
           <Routes />
         </Router>
-      </Provider>
+      </Provider> */}
     </div>
   );
 }
