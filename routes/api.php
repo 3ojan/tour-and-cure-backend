@@ -26,3 +26,8 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('logout', 'logout');
     Route::post('refresh', 'refresh');
 });
+//add ectivity endpoint   *** ROUTE / CONTROLLER / ACTION INSIDE CONTROLLER (e.g. /post/ctivity/new   ActivityController  store(request))
+Route::post('/activity/new', [App\Http\Controllers\ActivityController::class, 'store']);
+Route::post('/activity/update', [App\Http\Controllers\ActivityController::class, 'update']);
+Route::get('/activity/all', [App\Http\Controllers\ActivityController::class, 'all']);
+
