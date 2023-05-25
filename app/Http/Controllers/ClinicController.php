@@ -21,7 +21,8 @@ class ClinicController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Request $request)
+    ////TODOOO
+    public function create( Clinic $clinic)
     {
         //
         try {
@@ -76,16 +77,43 @@ class ClinicController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+  public function update(Request $request, Clinic $clinic)
     {
-        //
+        try {
+            // Validate the request data
+            $validatedData = $request->validate([
+                'name' => 'required|string',
+                'activity_id' => 'required|exists:activities,id',
+                'creator_id' => 'required|exists:users,id',
+            ]);
+
+            // Update the clinic record
+            $clinic->update($validatedData);
+
+            // Return success message
+            return response()->json(['message' => 'Clinic updated successfully'], 200);
+        } catch (ValidationException $e) {
+            // Handle validation errors
+            return response()->json(['error' => $e->errors()], 422);
+        } catch (\Exception $e) {
+            // Handle other errors
+            return response()->json(['error' => 'Failed to update clinic'], 500);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Clinic $clinic)
     {
-        //
+        try {
+            // Delete the clinic record
+            $clinic->delete();
+            // Return success message
+            return response()->json(['message' => 'Clinic deleted successfully'], 200);
+        } catch (\Exception $e) {
+            // Handle errors
+            return response()->json(['error' => 'Failed to delete clinic'], 500);
+        }
     }
 }

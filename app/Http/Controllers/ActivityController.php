@@ -147,6 +147,14 @@ class ActivityController extends Controller
      */
     public function destroy(Activity $activity)
     {
-        //
+        try {
+            // Delete the clinic record
+            $activity->delete();
+            // Return success message
+            return response()->json(['message' => 'Activity deleted successfully'], 200);
+        } catch (\Exception $e) {
+            // Handle errors
+            return response()->json(['error' => 'Failed to delete activity'], 500);
+        }
     }
 }
