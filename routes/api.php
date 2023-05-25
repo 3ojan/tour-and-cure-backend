@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ClinicController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,3 +32,6 @@ Route::post('/activity/new', [App\Http\Controllers\ActivityController::class, 's
 Route::post('/activity/update', [App\Http\Controllers\ActivityController::class, 'update']);
 Route::get('/activity/all', [App\Http\Controllers\ActivityController::class, 'all']);
 
+
+Route::resource('clinics', App\Http\Controllers\ClinicController::class);
+Route::post('clinics/create', [App\Http\Controllers\ClinicController::class, 'create']);

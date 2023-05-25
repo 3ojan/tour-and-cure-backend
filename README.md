@@ -167,3 +167,10 @@ DB_PASSWORD=root
     php artisan migrate
 ## IMPORTANT 2 - if something with php artisan is giving errors (canceled installations, old routes, ...etc) - this is 99% problem solver
     php artisan config:clear
+
+
+
+
+
+## laravel hepler 
+php artisan r:l -show all routes
