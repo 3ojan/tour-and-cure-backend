@@ -17,11 +17,11 @@ class DatabaseSeeder extends Seeder
         $this->call(CountrySeeder::class);
         $this->call(CurrencySeeder::class);
 
-        // install passport
-        // Artisan::call('passport:install');
-
         // clients
         $this->call(UserRoleSeeder::class);
         $this->call(UserSeeder::class);
+
+        // data
+        $this->call(ClinicSeeder::class);
     }
 }
