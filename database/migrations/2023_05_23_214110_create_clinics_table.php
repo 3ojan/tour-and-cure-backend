@@ -14,12 +14,26 @@ return new class extends Migration
         Schema::create('clinics', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->string('name');
-            $table->unsignedBigInteger('activity_id');
-            $table->unsignedBigInteger('creator_id');
+            $table->longText('description')->default('');
+            $table->string('address');
+            $table->string('postcode');
+            $table->string('city');
+            $table->unsignedBigInteger('country_id')->nullable();
 
-            // $table->foreign('activity_id')->references('id')->on('activities')->onDelete('cascade');
-            // $table->foreign('creator_id')->references('id')->on('users')->onDelete('cascade');
+            $table->string('latitude')->nullable();
+            $table->string('longitude')->nullable();
+
+            $table->string('web');
+            $table->string('email');
+            $table->string('mobile');
+            $table->string('phone');
+
+            $table->string('contact_person');
+            $table->string('contact_email');
+            $table->string('contact_phone');
         });
     }
 
