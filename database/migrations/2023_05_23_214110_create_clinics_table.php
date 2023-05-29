@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->string('name');
-            $table->longText('description')->default('');
+            $table->longText('description')->nullable();
             $table->string('address');
             $table->string('postcode');
             $table->string('city');
@@ -26,14 +26,14 @@ return new class extends Migration
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();
 
-            $table->string('web');
-            $table->string('email');
-            $table->string('mobile');
-            $table->string('phone');
+            $table->string('web')->nullable();
+            $table->string('email')->nullable();
+            $table->string('mobile')->nullable();
+            $table->string('phone')->nullable();
 
-            $table->string('contact_person');
-            $table->string('contact_email');
-            $table->string('contact_phone');
+            $table->string('contact_person')->nullable();
+            $table->string('contact_email')->nullable();
+            $table->string('contact_phone')->nullable();
         });
     }
 
