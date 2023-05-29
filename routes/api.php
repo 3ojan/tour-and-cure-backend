@@ -16,17 +16,22 @@ use App\Http\Controllers\ClinicController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-
 Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
     Route::post('register', 'register');
     Route::post('logout', 'logout');
     Route::post('refresh', 'refresh');
 });
+
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
+
+
+// protected routes
+
+// guarded routes
+
 //add ectivity endpoint   *** ROUTE / CONTROLLER / ACTION INSIDE CONTROLLER (e.g. /post/ctivity/new   ActivityController  store(request))
 Route::post('/activity/new', [App\Http\Controllers\ActivityController::class, 'store']);
 Route::post('/activity/update', [App\Http\Controllers\ActivityController::class, 'update']);
