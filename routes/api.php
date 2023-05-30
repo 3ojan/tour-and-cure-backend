@@ -23,20 +23,42 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('refresh', 'refresh');
 });
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-
 // protected routes
 
-// guarded routes
-
-//add ectivity endpoint   *** ROUTE / CONTROLLER / ACTION INSIDE CONTROLLER (e.g. /post/ctivity/new   ActivityController  store(request))
-Route::post('/activity/new', [App\Http\Controllers\ActivityController::class, 'store']);
-Route::post('/activity/update', [App\Http\Controllers\ActivityController::class, 'update']);
-Route::get('/activity/all', [App\Http\Controllers\ActivityController::class, 'all']);
-
-
+// public routes
 Route::resource('clinics', App\Http\Controllers\ClinicController::class);
-Route::post('clinics/create', [App\Http\Controllers\ClinicController::class, 'create']);
+
+// media upload test
+Route::post('/media/upload', [App\Http\Controllers\MediaController::class, 'uploadFile']);
+
+
+// public
+Route::group(['middleware' => ['api']], function () {
+    Route::resource('clinics', App\Http\Controllers\ClinicController::class);
+    Route::resource('countries', App\Http\Controllers\CountryController::class);
+    Route::resource('inquiries', App\Http\Controllers\InquiryController::class);
+    Route::resource('services', App\Http\Controllers\ServiceController::class);
+    Route::resource('user/roles', App\Http\Controllers\UserRoleController::class);
+});
+
+// protected
+Route::group(['middleware' => ['api', 'auth:api']], function () {
+    // Route::get('user/me', [App\Http\Controllers\API\UserController::class, 'me']);
+
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+
+    // Route::get('user-roles/options', [App\Http\Controllers\API\UserRoleController::class, 'options']);
+    // Route::apiResource('user-roles', App\Http\Controllers\API\UserRoleController::class); // 2021-10-09 08:49
+
+    // Route::get('options', [App\Http\Controllers\API\OptionsController::class, 'index']);
+    // Route::get('options/{type?}', [App\Http\Controllers\API\OptionsController::class, 'options']);
+});
+
+// not found
+Route::fallback(function () {
+    return response()->json([
+        'message' => 'API resource not found'
+    ], 404);
+});

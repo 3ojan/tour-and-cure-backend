@@ -32,7 +32,7 @@ class CurrencySeeder extends Seeder
             while (($row = fgetcsv($handle, 1000, "\t")) !== false) {
                 $row = array_map('trim', $row);
                 Currency::create([
-                    'active' => in_array($row[0], ['HRK', 'AUD', 'CAD', 'CZK', 'DKK', 'NOK', 'SEK', 'CHF', 'GBP', 'USD', 'BAM', 'EUR', 'PLN']) ? true : false,
+                    'active' => in_array($row[0], ['AUD', 'CAD', 'CZK', 'DKK', 'NOK', 'SEK', 'CHF', 'GBP', 'USD', 'BAM', 'EUR', 'PLN']) ? true : false,
                     'iso' => $row[0],
                     'num' => $row[1],
                     'decimal_place' => $row[2],

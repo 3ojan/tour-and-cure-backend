@@ -22,6 +22,9 @@ class DatabaseSeeder extends Seeder
         $this->call(UserSeeder::class);
 
         // data
+        $this->call(LanguageSeeder::class);
+        $this->call(MediaSeeder::class);
         $this->call(ClinicSeeder::class);
+        $this->call(InquirySeeder::class);
     }
 }
