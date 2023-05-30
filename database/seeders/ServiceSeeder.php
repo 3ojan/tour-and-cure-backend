@@ -14,10 +14,6 @@ class ServiceSeeder extends Seeder
     {
         $serviceData = [
             [
-                'hr' => 'Odaberite područje medicine',
-                'en' => 'Choose a medical field'
-            ],
-            [
                 'hr' => 'Anesteziologija',
                 'en' => 'Anesthesiology'
             ],
