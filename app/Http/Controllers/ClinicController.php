@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Clinic;
+use App\Http\Requests\ClinicRequest;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Log;
 
 class ClinicController extends Controller
 {
@@ -14,27 +13,25 @@ class ClinicController extends Controller
         return Clinic::all();
     }
 
-    public function show($id)
+    public function show(Clinic $clinic)
     {
-        return Clinic::find($id);
+        return $clinic;
     }
 
-    public function store(Request $request)
+    public function store(ClinicRequest $request)
     {
         return Clinic::create($request->all());
     }
 
-    public function update(Request $request, $id)
+    public function update(ClinicRequest $request, Clinic $clinic)
     {
-        $clinic = Clinic::findOrFail($id);
         $clinic->update($request->all());
 
         return $clinic;
     }
 
-    public function delete(Request $request, $id)
+    public function delete(Request $request, Clinic $clinic)
     {
-        $clinic = Clinic::findOrFail($id);
         $clinic->delete();
 
         return 204;
