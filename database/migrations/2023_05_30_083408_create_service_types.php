@@ -14,6 +14,9 @@ return new class extends Migration
         Schema::create('service_types', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->string('code')->unique();
+            $table->string('en');
+            $table->string('hr');
         });
     }
 
