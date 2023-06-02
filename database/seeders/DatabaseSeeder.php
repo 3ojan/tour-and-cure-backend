@@ -2,9 +2,7 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Artisan;
 
 class DatabaseSeeder extends Seeder
 {
@@ -23,7 +21,7 @@ class DatabaseSeeder extends Seeder
 
         // data
         $this->call(LanguageSeeder::class);
-        $this->call(ServiceSeeder::class);
+        $this->call(ServiceTypeSeeder::class);
         $this->call(MediaSeeder::class);
         $this->call(ClinicSeeder::class);
         $this->call(InquirySeeder::class);

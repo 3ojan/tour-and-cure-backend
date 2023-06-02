@@ -37,6 +37,7 @@ Route::group(['middleware' => ['api']], function () {
     Route::resource('clinics', App\Http\Controllers\ClinicController::class);
     Route::resource('countries', App\Http\Controllers\CountryController::class);
     Route::resource('inquiries', App\Http\Controllers\InquiryController::class);
+    Route::resource('service_types', App\Http\Controllers\ServiceTypeController::class);
     Route::resource('services', App\Http\Controllers\ServiceController::class);
     Route::resource('user/roles', App\Http\Controllers\UserRoleController::class);
 });

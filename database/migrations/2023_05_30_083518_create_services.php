@@ -14,9 +14,15 @@ return new class extends Migration
         Schema::create('services', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->unsignedBigInteger('clinic_id');
+            $table->string('service_type');
             $table->string('name');
             $table->string('name_en');
             $table->string('name_hr');
+            $table->boolean('price_on_request')->default(true);
+            $table->decimal('price_exact', 10, 2)->nullable();
+            $table->decimal('price_from', 10, 2)->nullable();
+            $table->decimal('price_to', 10, 2)->nullable();
         });
     }
 
