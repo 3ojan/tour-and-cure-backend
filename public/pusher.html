@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<head>
+  <title>Pusher Test</title>
+  <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
+  <script>
+
+require('laravel-echo'); 
+  window.Pusher = require('pusher-js'); 
+  window.Echo = new Echo({
+      broadcaster: 'pusher',
+      key: "1611739",
+      forceTLS: false,
+      wsHost: "127.0.0.1",
+      wsPort: 6001,
+      encrypted: false
+  });
+
+    // Enable pusher logging - don't include this in production
+    Pusher.logToConsole = true;
+
+    var pusher = new Pusher('7b0220f0033e14bc4306', {
+      cluster: 'eu'
+    });
+
+    var channel = pusher.subscribe('my-channel');
+    channel.bind('MessageSent', function(data) {
+      alert(JSON.stringify(data));
+    });
+  </script>
+</head>
+<body>
+  <h1>Pusher Test</h1>
+  <p>
+    Try publishing an event to channel <code>my-channel</code>
+    with event name <code>MessageSent</code>.
+  </p>
+</body>

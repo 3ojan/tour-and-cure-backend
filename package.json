@@ -7,10 +7,6 @@
     },
     "devDependencies": {
         "@popperjs/core": "^2.11.6",
-        "@vitejs/plugin-react": "^2.2.0",
-        "axios": "^1.1.2",
-        "bootstrap": "^5.2.3",
-        "laravel-vite-plugin": "^0.7.2",
         "@types/react": "^17.0.43",
         "@types/react-color": "^3.0.6",
         "@types/react-dom": "^17.0.14",
@@ -18,6 +14,9 @@
         "@types/react-router-dom": "^5.3.3",
         "@typescript-eslint/eslint-plugin": "^5.16.0",
         "@typescript-eslint/parser": "^5.16.0",
+        "@vitejs/plugin-react": "^2.2.0",
+        "axios": "^1.1.2",
+        "bootstrap": "^5.2.3",
         "eslint": "^8.12.0",
         "eslint-config-airbnb-typescript": "^16.1.4",
         "eslint-config-prettier": "^8.5.0",
@@ -26,9 +25,12 @@
         "eslint-plugin-prettier": "^4.0.0",
         "eslint-plugin-react": "^7.29.4",
         "eslint-plugin-react-hooks": "^4.3.0",
+        "laravel-echo": "^1.15.1",
+        "laravel-vite-plugin": "^0.7.2",
+        "pusher-js": "^8.0.2",
         "sass": "^1.56.1",
-        "vite": "^4.0.0",
-        "typescript": "^4.6.3"
+        "typescript": "^4.6.3",
+        "vite": "^4.0.0"
     },
     "dependencies": {
         "@ant-design/icons": "^4.7.0",
