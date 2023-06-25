@@ -15,20 +15,27 @@ class UserRoleSeeder extends Seeder
      */
     public function run()
     {
+        $permissions = config('permissions');
+
         UserRole::create([
-            'title' => 'Administrator',
+            'title' => 'Admin',
             'name' => 'admin',
-            'permissions' => ['admin'],
+            'permissions' => array_values($permissions['EAdminRoles']),
         ]);
         UserRole::create([
-            'title' => 'Client',
-            'name' => 'client',
-            'permissions' => ['change_own_password'],
+            'title' => 'Clinic Owner',
+            'name' => 'clinic_owner',
+            'permissions' => array_values($permissions['EClinicOwnerRoles']),
+        ]);
+        UserRole::create([
+            'title' => 'Clinic User',
+            'name' => 'clinic_user',
+            'permissions' => array_values($permissions['EClinicUserRoles']),
         ]);
         UserRole::create([
             'title' => 'User',
             'name' => 'user',
-            'permissions' => ['change_own_password'],
+            'permissions' => array_values($permissions['EUserRoles']),
         ]);
     }
 }
