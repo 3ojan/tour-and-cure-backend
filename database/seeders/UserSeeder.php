@@ -33,13 +33,22 @@ class UserSeeder extends Seeder
             'remember_token' => Str::random(10),
             'role' => 'admin',
         ]);
+        //
         User::create([
-            'name' => 'Clinic User',
-            'email' => 'clinic@tourcure.com',
+            'name' => 'Clinic Owner',
+            'email' => 'clinic_owner@tourcure.com',
             'email_verified_at' => now(),
             'password' => Hash::make('Test1234'),
             'remember_token' => Str::random(10),
-            'role' => 'clinic',
+            'role' => 'clinic_owner',
+        ]);
+        User::create([
+            'name' => 'Clinic User',
+            'email' => 'clinic_user@tourcure.com',
+            'email_verified_at' => now(),
+            'password' => Hash::make('Test1234'),
+            'remember_token' => Str::random(10),
+            'role' => 'clinic_user',
         ]);
         User::create([
             'name' => 'Test User',
