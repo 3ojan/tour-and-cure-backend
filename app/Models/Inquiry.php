@@ -13,6 +13,7 @@ class Inquiry extends Model
 
     protected $fillable = [
         'user_id',
+        'service_type_id',
         'form_json'
     ];
 

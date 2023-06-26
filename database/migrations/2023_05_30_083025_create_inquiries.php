@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('service_type_id');
             $table->json('form_json');
         });
     }
