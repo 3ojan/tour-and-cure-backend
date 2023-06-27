@@ -1,3 +1,24 @@
+# Development
+
+## Setup
+
+- migrate: `./vendor/bin/sail artisan migrate --seed` 
+- rekreiraj bazu i seedaj (obrise sve): `./vendor/bin/sail artisan migrate:fresh --seed`
+
+## Run
+- `composer update` - prije starta
+- start: `./vendor/bin/sail up` - za koristenje sa dockerom
+## Help
+- pogledat popis api-ja: `php artisan r:l`
+- sail down: `./vendor/bin/sail down`
+- 
+
+
+
+
+
+
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
