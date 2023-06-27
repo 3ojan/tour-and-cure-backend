@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class ServiceType extends Model
 {
@@ -21,4 +22,9 @@ class ServiceType extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function clinics(): BelongsToMany
+    {
+        return $this->belongsToMany(Clinic::class, 'clinic_service_type', 'service_type_id', 'clinic_id');
+    }
 }

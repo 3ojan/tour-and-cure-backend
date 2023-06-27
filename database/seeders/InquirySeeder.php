@@ -14,6 +14,7 @@ class InquirySeeder extends Seeder
     {
         Inquiry::create([
             'user_id' => 1,
+            'service_type_id' => 1,
             'form_json' => [
                 'subject' => 'Ja bi nekaj',
                 'body' => 'Bok, ja bi nekaj a ne znam kaj, jel bi i vi?',

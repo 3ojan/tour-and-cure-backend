@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Clinic extends Model
@@ -34,9 +35,13 @@ class Clinic extends Model
     ];
 
     // Define relationships or additional logic as needed
-    /*
-    public function services(): HasMany {
-        return $this->hasMany(Services::class);
+    public function serviceTypes(): BelongsToMany
+    {
+        return $this->belongsToMany(ServiceType::class, 'clinic_service_type', 'clinic_id', 'service_type_id');
     }
-    */
+
+    public function users(): HasMany
+    {
+        return $this->hasMany(User::class);
+    }
 }
