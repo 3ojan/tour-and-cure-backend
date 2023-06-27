@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Clinic;
 use App\Http\Requests\ClinicRequest;
+use App\Models\ServiceType;
 use Illuminate\Http\Request;
 
 class ClinicController extends Controller
 {
     public function index()
     {
-        return Clinic::all();
+        return Clinic::with('serviceTypes')->get();
     }
 
     public function show(Clinic $clinic)

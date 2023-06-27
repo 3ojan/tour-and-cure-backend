@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 
 use App\Models\Clinic;
+use App\Models\ServiceType;
 
 class ClinicSeeder extends Seeder
 {
@@ -39,5 +40,12 @@ class ClinicSeeder extends Seeder
         ]);
 
         Clinic::factory(5)->create();
+
+        $service_types = ServiceType::all();
+        Clinic::all()->each(function ($clinic) use ($service_types) {
+            $clinic->serviceTypes()->attach(
+                $service_types->random(rand(1, 10))->pluck('id')->toArray()
+            );
+        });
     }
 }
