@@ -20,6 +20,11 @@ class UserRole extends Model
         'permissions' => 'json'
     ];
 
+    protected $hidden = [
+        'created_at',
+        'updated_at'
+    ];
+
     public $option = [
         'name' => 'title'
     ];
