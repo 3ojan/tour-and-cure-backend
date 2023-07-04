@@ -32,6 +32,25 @@ class User extends Authenticatable implements JWTSubject
     protected $hidden = [
         'password',
         'remember_token',
+        'user_role'
+    ];
+
+    /**
+     * The attributes that should be visible in arrays.
+     *
+     * @var array
+     */
+    protected $visible = [
+        // 'user_role'
+    ];
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'permissions'
     ];
 
     /**
@@ -44,7 +63,7 @@ class User extends Authenticatable implements JWTSubject
     ];
 
 
-     /**
+    /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
      * @return mixed
@@ -64,4 +83,39 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
+    /**
+     * Related inquiries.
+     *
+     * @return array
+     */
+    public function inquiries()
+    {
+        return $this->hasMany(Inquiry::class);
+    }
+
+    /**
+     * Related clinics.
+     *
+     * @return array
+     */
+    public function clinics()
+    {
+        return $this->hasMany(Clinic::class);
+    }
+
+    /**
+     * Get the user's role.
+     */
+    public function userRole()
+    {
+        return $this->belongsTo(UserRole::class, 'role', 'name');
+    }
+
+    /**
+     * Get the user's permissions.
+     */
+    public function getPermissionsAttribute()
+    {
+        return $this->userRole->permissions;
+    }
 }
