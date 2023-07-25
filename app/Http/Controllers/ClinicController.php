@@ -28,6 +28,18 @@ class ClinicController extends Controller
     {
         $clinic->update($request->all());
 
+        // Step 2: Update the related ServiceType models
+        $serviceTypeIds = [];
+        foreach ($request['service_types'] as $serviceTypeData) {
+            $serviceTypeIds[] = $serviceTypeData['id'];
+        }
+
+        $serviceTypeIds = [];
+        foreach ($request['service_types'] as $serviceTypeData) {
+            $serviceTypeIds[] = $serviceTypeData['id'];
+        }
+
+        $clinic->serviceTypes()->sync($serviceTypeIds);
         return $clinic;
     }
 
