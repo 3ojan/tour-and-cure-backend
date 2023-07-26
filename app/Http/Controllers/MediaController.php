@@ -12,6 +12,7 @@ class MediaController extends Controller
     public function uploadFile(Request $request): string
     {
         $path = $request->file('file')->store('files');
+        
         return $path;
     }
 }

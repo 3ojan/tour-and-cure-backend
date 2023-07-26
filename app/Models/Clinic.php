@@ -32,7 +32,6 @@ class Clinic extends Model
         'contact_person',
         'contact_email',
         'contact_phone',
-        
     ];
 
     // Define relationships or additional logic as needed
