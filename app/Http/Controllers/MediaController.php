@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\LogoImage;
+use Illuminate\Support\Facades\Auth;
 
 class MediaController extends Controller
 {
@@ -14,6 +16,26 @@ class MediaController extends Controller
         $path = $request->file('file')->store('files');
         
         return $path;
+    }
+    public function uploadLogo(Request $request): string
+    {
+        $path = $request->file('file')->store('files/logos');
+        // Save the path to the LogoImage model
+        $info = pathinfo($path);
+        $directory = $info['dirname'];
+        $fileName = $info['basename'];
+
+        $logo = LogoImage::create([
+            'file_name' => $fileName,
+            'path' => $directory,
+            'user_id' => Auth::id(),
+        ]);
+        
+        // Return a response to the client
+        return response()->json([
+            'message' => 'Logo uploaded and saved successfully!',
+            'response' => $path,
+        ], 201);
     }
 }
 
