@@ -34,6 +34,10 @@ return [
         ],
     ],
 
+    'handlers' => [
+        App\Handlers\ChatMessageHandler::class,
+    ],
+
     /*
      * This class is responsible for finding the apps. The default provider
      * will use the apps defined in this config file.
@@ -48,7 +52,6 @@ return [
      * Leave this empty if you want to accept requests from all hosts.
      */
     'allowed_origins' => [
-        //
     ],
 
     /*

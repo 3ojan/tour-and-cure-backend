@@ -32,7 +32,12 @@ class Clinic extends Model
         'contact_person',
         'contact_email',
         'contact_phone',
+
+        'logo_image_id',
     ];
+
+      // Automatically load the logoImage relationship when fetching Clinic data
+    protected $with = ['logoImage'];
 
     // Define relationships or additional logic as needed
     public function serviceTypes(): BelongsToMany
@@ -43,5 +48,10 @@ class Clinic extends Model
     public function users(): HasMany
     {
         return $this->hasMany(User::class);
+    }
+    
+    public function logoImage()
+    {
+        return $this->belongsTo('App\Models\LogoImage', 'logo_image_id')->withDefault();
     }
 }

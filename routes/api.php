@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClinicController;
+use Illuminate\Support\Facades\Broadcast;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,12 +25,14 @@ Route::controller(AuthController::class)->group(function () {
 });
 
 // protected routes
+Broadcast::routes();
 
 // public routes
 Route::resource('clinics', App\Http\Controllers\ClinicController::class);
 
 // media upload test
 Route::post('/media/upload', [App\Http\Controllers\MediaController::class, 'uploadFile']);
+Route::post('/media/upload/logo', [App\Http\Controllers\MediaController::class, 'uploadLogo']);
 
 
 // public

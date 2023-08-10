@@ -41,4 +41,8 @@ class MessageSent implements ShouldBroadcast
             new PrivateChannel('my-channel'),
         ];
     }
+    public function boardcastAs(): array
+    {
+        return 'event-pusher';
+    }
 }
