@@ -12,16 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('clinics', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->timestamps();
-            $table->unsignedBigInteger('created_by')->nullable();
-            $table->unsignedBigInteger('updated_by')->nullable();
+            $table->uuid('created_by')->nullable();
+            $table->uuid('updated_by')->nullable();
             $table->string('name');
             $table->longText('description')->nullable();
             $table->string('address');
             $table->string('postcode');
             $table->string('city');
-            $table->unsignedBigInteger('country_id')->nullable();
+            $table->uuid('country_id')->nullable();
 
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();

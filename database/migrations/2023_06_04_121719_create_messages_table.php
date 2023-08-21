@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('messages', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->timestamps();
             //insert the lines below
-            $table->unsignedBigInteger('user_id');
+            $table->uuid('user_id');
             $table->text('message');
         });
     }

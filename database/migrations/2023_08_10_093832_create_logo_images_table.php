@@ -12,9 +12,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('logo_images', function (Blueprint $table) {
-            $table->id();
-            $table->string('file_name'); 
-            $table->string('path'); 
+            $table->uuid('id')->primary();
+            $table->string('file_name');
+            $table->string('path');
             $table->timestamps();
         });
     }

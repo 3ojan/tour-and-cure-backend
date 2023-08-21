@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Clinic extends Model
 {
-    use HasFactory;
+    use HasUuids, HasFactory;
 
     protected $table = 'clinics';
 
@@ -36,7 +37,7 @@ class Clinic extends Model
         'logo_image_id',
     ];
 
-      // Automatically load the logoImage relationship when fetching Clinic data
+    // Automatically load the logoImage relationship when fetching Clinic data
     protected $with = ['logoImage'];
 
     // Define relationships or additional logic as needed
@@ -49,7 +50,7 @@ class Clinic extends Model
     {
         return $this->hasMany(User::class);
     }
-    
+
     public function logoImage()
     {
         return $this->belongsTo('App\Models\LogoImage', 'logo_image_id')->withDefault();
