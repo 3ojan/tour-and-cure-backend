@@ -14,7 +14,7 @@ class MediaController extends Controller
     public function uploadFile(Request $request): string
     {
         $path = $request->file('file')->store('files');
-        
+
         return $path;
     }
     public function uploadLogo(Request $request): string
@@ -44,11 +44,11 @@ class MediaController extends Controller
             'path' => $directory,
             'user_id' => Auth::id(),
         ]);
-        
+
         // Return a response to the client
         return response()->json([
             'message' => 'Logo uploaded and saved successfully!',
-            'response' => $path,
+            'response' => $logo,
         ], 201);
     }
 }
