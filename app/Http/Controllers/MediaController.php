@@ -33,9 +33,6 @@ class MediaController extends Controller
         } else {
             \Log::info("File upload encountered an error: " . $request->file('file')->getErrorMessage());
         }
-
-
-        dd($request->allFiles());
         $path = $request->file('file')->store('files/logos');
         // Save the path to the LogoImage model
         $info = pathinfo($path);

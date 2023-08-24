@@ -22,6 +22,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+<<<<<<< HEAD
     Schema::table('clinics', function (Blueprint $table) {
         // Firstly, we need to drop the foreign key constraint
         $table->dropForeign(['logo_image_id']);
@@ -29,5 +30,10 @@ return new class extends Migration
         // Then drop the column itself
         $table->dropColumn('logo_image_id');
     });
+=======
+        Schema::table('clinics', function (Blueprint $table) {
+            //
+        });
+>>>>>>> main
     }
 };
