@@ -21,18 +21,18 @@ class MediaController extends Controller
     {
         \Log::info('request: ' . $request);
         if ($request->hasFile('file')) {
-    $file = $request->file('file');
-    \Log::info('File Name: ' . $file->getClientOriginalName());
-    \Log::info('File Extension: ' . $file->getClientOriginalExtension());
-    \Log::info('File Real Path: ' . $file->getRealPath());
-    \Log::info('File Size: ' . $file->getSize());
-    \Log::info('File Mime Type: ' . $file->getMimeType());
-}
-if ($request->file('file')->isValid()) {
-    \Log::info("File upload was successful!");
-} else {
-    \Log::info("File upload encountered an error: " . $request->file('file')->getErrorMessage());
-}
+            $file = $request->file('file');
+            \Log::info('File Name: ' . $file->getClientOriginalName());
+            \Log::info('File Extension: ' . $file->getClientOriginalExtension());
+            \Log::info('File Real Path: ' . $file->getRealPath());
+            \Log::info('File Size: ' . $file->getSize());
+            \Log::info('File Mime Type: ' . $file->getMimeType());
+        }
+        if ($request->file('file')->isValid()) {
+            \Log::info("File upload was successful!");
+        } else {
+            \Log::info("File upload encountered an error: " . $request->file('file')->getErrorMessage());
+        }
 
 
         dd($request->allFiles());
