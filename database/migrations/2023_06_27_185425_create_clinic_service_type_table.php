@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('clinic_service_type', function (Blueprint $table) {
-            $table->unsignedInteger('clinic_id');
-            $table->unsignedInteger('service_type_id');
+            $table->uuid('clinic_id');
+            $table->uuid('service_type_id');
         });
     }
 

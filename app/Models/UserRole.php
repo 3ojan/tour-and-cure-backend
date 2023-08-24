@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class UserRole extends Model
 {
-    use HasFactory;
+    use HasUuids, HasFactory;
 
     protected $table = 'user_roles';
 

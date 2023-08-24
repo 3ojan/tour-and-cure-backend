@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -10,7 +11,7 @@ use Illuminate\Support\Str;
 
 class Model extends EloquentModel
 {
-    use HasFactory;
+    use HasUuids, HasFactory;
 
     public function filterByRequestQuery(Request $request)
     {

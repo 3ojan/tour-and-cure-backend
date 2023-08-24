@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('clinics', function (Blueprint $table) {
-            $table->unsignedBigInteger('logo_image_id')->nullable();
-            $table->foreign('logo_image_id')->references('id')->on('logo_images')->onDelete('set null');
+            $table->uuid('logo_image_id')->nullable();
+            // $table->foreignUuid('logo_image_id')->nullable()->references('id')->on('logo_images')->onDelete('set null');
         });
     }
 
@@ -23,10 +23,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('clinics', function (Blueprint $table) {
-            // Firstly, we need to drop the foreign key constraint
-            $table->dropForeign(['logo_image_id']);
-
-            // Then drop the column itself
+            // $table->dropForeign(['logo_image_id']);
             $table->dropColumn('logo_image_id');
         });
     }

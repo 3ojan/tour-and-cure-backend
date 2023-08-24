@@ -9,18 +9,18 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-  public function up()
+    public function up()
     {
         Schema::table('logo_images', function (Blueprint $table) {
-            $table->unsignedBigInteger('user_id')->nullable()->after('file_name');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
+            $table->uuid('user_id')->nullable()->after('file_name');
+            // $table->foreignUuid('user_id')->references('id')->on('users')->onDelete('set null');
         });
     }
 
     public function down()
     {
         Schema::table('logo_images', function (Blueprint $table) {
-            $table->dropForeign(['user_id']);
+            // $table->dropForeign(['user_id']);
             $table->dropColumn('user_id');
         });
     }

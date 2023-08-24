@@ -14,7 +14,7 @@ class CreateExchangeRates extends Migration
     public function up()
     {
         Schema::create('exchange_rates', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
 
             $table->string('exchange_rates_number');
             $table->date('valid_at');
