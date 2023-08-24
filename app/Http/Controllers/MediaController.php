@@ -14,11 +14,25 @@ class MediaController extends Controller
     public function uploadFile(Request $request): string
     {
         $path = $request->file('file')->store('files');
-        
+
         return $path;
     }
     public function uploadLogo(Request $request): string
     {
+        \Log::info('request: ' . $request);
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            \Log::info('File Name: ' . $file->getClientOriginalName());
+            \Log::info('File Extension: ' . $file->getClientOriginalExtension());
+            \Log::info('File Real Path: ' . $file->getRealPath());
+            \Log::info('File Size: ' . $file->getSize());
+            \Log::info('File Mime Type: ' . $file->getMimeType());
+        }
+        if ($request->file('file')->isValid()) {
+            \Log::info("File upload was successful!");
+        } else {
+            \Log::info("File upload encountered an error: " . $request->file('file')->getErrorMessage());
+        }
         $path = $request->file('file')->store('files/logos');
         // Save the path to the LogoImage model
         $info = pathinfo($path);
@@ -30,11 +44,11 @@ class MediaController extends Controller
             'path' => $directory,
             'user_id' => Auth::id(),
         ]);
-        
+
         // Return a response to the client
         return response()->json([
             'message' => 'Logo uploaded and saved successfully!',
-            'response' => $path,
+            'response' => $logo,
         ], 201);
     }
 }
