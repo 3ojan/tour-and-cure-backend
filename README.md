@@ -3,7 +3,7 @@
 ## Setup
 - instalirati Docker (ovisno o sustavu instalirati WSP za windows i napraviti update na WSP2)
 - kopirati i preimenovati .env.example u .env
-- generiranje ključa: `php artisan key:generate`
+- generiranje ključeva: `php artisan key:generate` & `php artisan jwt:secret`
 - composer update: `composer update`
 - dodati Sail u root: `alias sail='bash vendor/bin/sail'`
 
