@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 class User extends Authenticatable implements JWTSubject
@@ -118,5 +118,13 @@ class User extends Authenticatable implements JWTSubject
     public function getPermissionsAttribute()
     {
         return $this->userRole->permissions;
+    }
+
+    /**
+     * Get the user's providers for social login.
+     */
+    public function providers()
+    {
+        return $this->hasMany(Provider::class,'user_id','id');
     }
 }

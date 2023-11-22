@@ -33,6 +33,14 @@ class UserSeeder extends Seeder
             'remember_token' => Str::random(10),
             'role' => 'admin',
         ]);
+        User::create([
+            'name' => 'Mladen',
+            'email' => 'mladen@mail.com',
+            'email_verified_at' => now(),
+            'password' => Hash::make('10203040'),
+            'remember_token' => Str::random(10),
+            'role' => 'admin',
+        ]);
         //
         User::create([
             'name' => 'Clinic Owner',
