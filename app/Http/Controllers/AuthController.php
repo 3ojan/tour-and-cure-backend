@@ -20,14 +20,16 @@ class AuthController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => [
-            'login',
-            'register',
-            'forgotPassword',
-            'resetPassword',
-            'social/{provider}',
-            'social/{provider}/callback'
-            ]]);
+        $this->middleware('auth:api', [
+            'except' => [
+                'login',
+                'register',
+                'forgotPassword',
+                'resetPassword',
+                'social/*',
+                'social/*/callback',
+            ],
+        ]);
     }
 
     /**
