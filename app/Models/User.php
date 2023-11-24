@@ -4,6 +4,8 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -51,7 +53,8 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $appends = [
-        'permissions'
+        'permissions',
+        'clinic'
     ];
 
     /**
@@ -87,9 +90,9 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Related inquiries.
      *
-     * @return array
+     * @return HasMany
      */
-    public function inquiries()
+    public function inquiries(): HasMany
     {
         return $this->hasMany(Inquiry::class);
     }
@@ -97,17 +100,19 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Related clinics.
      *
-     * @return array
+     * @return BelongsTo
      */
-    public function clinics()
+    public function clinic(): BelongsTo
     {
-        return $this->hasMany(Clinic::class);
+        return $this->belongsTo(Clinic::class, 'clinic_id', 'id');
     }
 
     /**
      * Get the user's role.
+     *
+     * @return BelongsTo
      */
-    public function userRole()
+    public function userRole(): BelongsTo
     {
         return $this->belongsTo(UserRole::class, 'role', 'name');
     }
@@ -118,6 +123,18 @@ class User extends Authenticatable implements JWTSubject
     public function getPermissionsAttribute()
     {
         return $this->userRole->permissions;
+    }
+
+    /**
+     * Get the clinic data.
+     */
+    public function getClinicAttribute()
+    {
+        if ($this->clinic_id !== null) {
+            return $this->clinic()->first();
+        }
+
+        return null;
     }
 
     /**
