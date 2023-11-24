@@ -1,10 +1,13 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClinicController;
-use Illuminate\Support\Facades\Broadcast;
+use App\Http\Controllers\CountryController;
+use App\Http\Controllers\InquiryController;
+use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\ServiceTypeController;
+use App\Http\Controllers\UserRoleController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,48 +20,36 @@ use Illuminate\Support\Facades\Broadcast;
 |
 */
 
-Route::controller(AuthController::class)->group(function () {
-    Route::post('login', 'login');
-    Route::post('register', 'register');
-    Route::post('logout', 'logout');
-    Route::post('refresh', 'refresh');
-});
 
 // protected routes
-Broadcast::routes();
+Route::group(['middleware' => 'api'], function () {
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/refresh', [AuthController::class, 'refresh']);
+    Route::post('/me', [AuthController::class, 'me']);
 
-// public routes
-Route::resource('clinics', App\Http\Controllers\ClinicController::class);
+    Route::prefix('social')->group(function () {
+        Route::get('/{provider}', [AuthController::class, 'redirectToProvider']);
+        Route::get('/{provider}/callback', [AuthController::class, 'handleProviderCallback']);
+    });
+
+    Route::prefix('password')->group(function() {
+        Route::post('/forgot', [AuthController::class, 'forgotPassword']);
+        Route::post('/reset', [AuthController::class, 'resetPassword']);
+    });
+
+    Route::apiResource('clinics', ClinicController::class);
+    Route::apiResource('countries', CountryController::class);
+    Route::apiResource('inquiries', InquiryController::class);
+    Route::apiResource('service_types', ServiceTypeController::class);
+    Route::apiResource('services', ServiceController::class);
+    Route::apiResource('user/roles', UserRoleController::class);
+});
 
 // media upload test
 Route::post('/media/upload', [App\Http\Controllers\MediaController::class, 'uploadFile']);
 Route::post('/media/upload/logo', [App\Http\Controllers\MediaController::class, 'uploadLogo']);
-
-
-// public
-Route::group(['middleware' => ['api']], function () {
-    Route::resource('clinics', App\Http\Controllers\ClinicController::class);
-    Route::resource('countries', App\Http\Controllers\CountryController::class);
-    Route::resource('inquiries', App\Http\Controllers\InquiryController::class);
-    Route::resource('service_types', App\Http\Controllers\ServiceTypeController::class);
-    Route::resource('services', App\Http\Controllers\ServiceController::class);
-    Route::resource('user/roles', App\Http\Controllers\UserRoleController::class);
-});
-
-// protected
-Route::group(['middleware' => ['api', 'auth:api']], function () {
-    // Route::get('user/me', [App\Http\Controllers\API\UserController::class, 'me']);
-
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    });
-
-    // Route::get('user-roles/options', [App\Http\Controllers\API\UserRoleController::class, 'options']);
-    // Route::apiResource('user-roles', App\Http\Controllers\API\UserRoleController::class); // 2021-10-09 08:49
-
-    // Route::get('options', [App\Http\Controllers\API\OptionsController::class, 'index']);
-    // Route::get('options/{type?}', [App\Http\Controllers\API\OptionsController::class, 'options']);
-});
 
 // not found
 Route::fallback(function () {
