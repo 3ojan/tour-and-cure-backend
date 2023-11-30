@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ClinicController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\InquiryController;
@@ -39,6 +40,7 @@ Route::group(['middleware' => 'api'], function () {
         Route::post('/reset', [AuthController::class, 'resetPassword']);
     });
 
+    Route::apiResource('categories', CategoryController::class);
     Route::apiResource('clinics', ClinicController::class);
     Route::apiResource('countries', CountryController::class);
     Route::apiResource('inquiries', InquiryController::class);
