@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
         // data
         $this->call(LanguageSeeder::class);
         $this->call(ServiceTypeSeeder::class);
+        $this->call(CategorySeeder::class);
         $this->call(MediaSeeder::class);
         $this->call(ClinicSeeder::class);
         $this->call(InquirySeeder::class);

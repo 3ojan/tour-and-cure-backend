@@ -46,6 +46,16 @@ class Clinic extends Model
         return $this->belongsToMany(ServiceType::class, 'clinic_service_type', 'clinic_id', 'service_type_id');
     }
 
+    /**
+     * Define clinic-category relation
+     *
+     * @return BelongsToMany
+     */
+    public function categories(): BelongsToMany
+    {
+        return $this->belongsToMany(Category::class, 'category_clinic', 'clinic_id', 'category_id');
+    }
+
     public function users(): HasMany
     {
         return $this->hasMany(User::class);
