@@ -45,4 +45,9 @@ class Country extends Model
         'name' => 'required',
         'iso' => 'required',
     ];
+
+    public function clinic()
+    {
+        return $this->hasOne(Clinic::class);
+    }
 }
