@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Users\StoreClinicOwner;
-use App\Models\Clinic;
 use App\Models\User;
 use App\Traits\HttpResponses;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Requests\Users;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -32,13 +29,13 @@ class UserController extends Controller
     }
 
     /**
-     * Get a JWT token via given credentials.
+     * Create clinic_owner and clinic.
      *
-     * @param StoreClinicOwner $request
+     * @param Users\UserStoreClinicOwnerRequest $request
      *
      * @return JsonResponse
      */
-    public function storeClinicOwner(Users\StoreClinicOwner $request)
+    public function storeClinicOwner(Users\UserStoreClinicOwnerRequest $request)
     {
         $clinicController = app(ClinicController::class);
         $clinic = $clinicController->store($request);

@@ -16,12 +16,10 @@ class CategoryResource extends JsonResource
     {
         return [
             'id' => (string)$this->id,
-            'attributes' => [
-                'code' => $this->code,
-                'en' => $this->en,
-                'hr' => $this->hr,
-                'subcategories' => CategoryResource::collection($this->descendants->toTree()),
-                ]
+            'code' => $this->code,
+            'en' => $this->en,
+            'hr' => $this->hr,
+            'subcategories' => CategoryResource::collection($this->descendants->toTree())
         ];
     }
 }

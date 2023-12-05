@@ -7,24 +7,50 @@ use App\Models\Clinic;
 use App\Http\Requests\Clinics;
 use App\Http\Requests\Users;
 use App\Traits\HttpResponses;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
 class ClinicController extends Controller
 {
     use HttpResponses;
-    public function index(Clinics\ViewAll $request)
-    {
-        $clinics = Clinic::all();
 
-        return $this->success(ClinicResource::collection($clinics), 'Clinics fetched successfully') ;
+    /**
+     * Display a listing of the resource.
+     *
+     * @param Clinics\ClinicViewAllRequest $request
+     *
+     * @return JsonResponse
+     */
+    public function index(Clinics\ClinicViewAllRequest $request)
+    {
+        $perPage = $request->input('per_page', 2);
+
+        $clinics = Clinic::paginate($perPage);
+
+        return $this->success(ClinicResource::collection($clinics)->response()->getData(), 'Clinics fetched successfully');
     }
 
-    public function show(Clinics\View $request, Clinic $clinic)
+    /**
+     * Display a specified resource.
+     *
+     * @param Clinics\ClinicViewRequest $request
+     * @param Clinic $clinic
+     *
+     * @return JsonResponse
+     */
+    public function show(Clinics\ClinicViewRequest $request, Clinic $clinic)
     {
         return $this->success(new ClinicResource($clinic), 'Clinic fetched successfully!');
     }
 
-    public function store(Users\StoreClinicOwner $request)
+    /**
+     * Store a newly created resource.
+     *
+     * @param Users\UserStoreClinicOwnerRequest $request
+     *
+     * @return JsonResponse
+     */
+    public function store(Users\UserStoreClinicOwnerRequest $request)
     {
         $clinic = Clinic::create([
             'name' => $request->clinic_name,
@@ -40,7 +66,15 @@ class ClinicController extends Controller
         return $clinic;
     }
 
-    public function update(Clinics\Update $request, Clinic $clinic)
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param Clinics\ClinicUpdateRequest $request
+     * @param Clinic $clinic
+     *
+     * @return JsonResponse
+     */
+    public function update(Clinics\ClinicUpdateRequest $request, Clinic $clinic)
     {
         $validatedData = $request->validated();
         $validatedData['updated_by'] = Auth::user()->id;
@@ -54,7 +88,15 @@ class ClinicController extends Controller
         return $this->success(new ClinicResource($clinic), 'Clinic successfully updated!');
     }
 
-    public function destroy(Clinics\Delete $request, Clinic $clinic)
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param Clinics\ClinicDeleteRequest $request
+     * @param Clinic $clinic
+     *
+     * @return JsonResponse
+     */
+    public function destroy(Clinics\ClinicDeleteRequest $request, Clinic $clinic)
     {
         $clinic->delete();
 

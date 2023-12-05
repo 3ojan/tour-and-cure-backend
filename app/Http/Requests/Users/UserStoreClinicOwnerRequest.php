@@ -5,7 +5,7 @@ namespace App\Http\Requests\Users;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreClinicOwner extends FormRequest
+class UserStoreClinicOwnerRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

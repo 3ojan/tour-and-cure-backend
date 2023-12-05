@@ -16,13 +16,11 @@ class UserResource extends JsonResource
     {
         return [
             'id' => (string) $this->id,
-            'attributes' => [
-                'name' => $this->name,
-                'email' => $this->email,
-                'clinic' => new ClinicResource($this->whenLoaded('clinic')),
-                'role' => $this->role,
-                'permissions' => $this->permissions
-            ],
+            'name' => $this->name,
+            'email' => $this->email,
+            'clinic' => new ClinicResource($this->whenLoaded('clinic')),
+            'role' => $this->role,
+            'permissions' => $this->permissions
         ];
     }
 }

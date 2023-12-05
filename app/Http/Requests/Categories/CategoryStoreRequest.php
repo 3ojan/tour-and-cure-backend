@@ -6,7 +6,7 @@ use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class Update extends FormRequest
+class CategoryStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,10 +28,10 @@ class Update extends FormRequest
     public function rules(): array
     {
         return [
-            'code' => 'sometimes|string',
-            'en' => 'sometimes|string',
-            'hr' => 'sometimes|string',
-            'parent_id' => 'sometimes|string'
+            'code' => 'required|string',
+            'en' => 'required|string',
+            'hr' => 'required|string',
+            'parent_id' => 'sometimes|nullable|string'
         ];
     }
 }
