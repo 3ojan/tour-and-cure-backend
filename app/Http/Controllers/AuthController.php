@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PasswordReset;
 use App\Models\User;
 use App\Notifications\PasswordResetNotification;
-use App\Http\Requests\Authentication;
+use App\Http\Requests\Authentications;
 use Exception;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\JsonResponse;
@@ -71,20 +71,16 @@ class AuthController extends Controller
      *
      * @return JsonResponse
      */
-    public function register(Request $request)
+    public function register(Authentications\AuthenticationRegisterNewUserRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6',
-        ]);
-
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => 'user'
         ]);
+
+        $user->refresh();
 
         $token = JWTAuth::fromUser($user);
 
@@ -134,11 +130,11 @@ class AuthController extends Controller
     /**
      * Creates token for password reset and sends password reset email.
      *
-     * @param Authentication\ForgotPassword $request
+     * @param Authentications\AuthenticationForgotPasswordRequest $request
      * @return JsonResponse
      * @throws Exception
      */
-    public function forgotPassword(Authentication\ForgotPassword $request)
+    public function forgotPassword(Authentications\AuthenticationForgotPasswordRequest $request)
     {
         $user = ($query = User::query());
 
@@ -175,10 +171,10 @@ class AuthController extends Controller
     /**
      * Resets password using token sent by forgotPassword method.
      *
-     * @param Authentication\ResetPassword $request
+     * @param Authentications\AuthenticationResetPasswordRequest $request
      * @return JsonResponse
      */
-    public function resetPassword(Authentication\ResetPassword $request)
+    public function resetPassword(Authentications\AuthenticationResetPasswordRequest $request)
     {
         $attributes = $request->validated();
 

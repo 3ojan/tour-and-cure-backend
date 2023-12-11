@@ -16,7 +16,8 @@ return new class extends Migration
                 ->after('password')
                 ->nullable()
                 ->references('id')
-                ->on('clinics');
+                ->on('clinics')
+                ->onDelete('cascade');
         });
     }
 

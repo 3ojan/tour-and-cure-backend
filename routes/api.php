@@ -7,6 +7,7 @@ use App\Http\Controllers\CountryController;
 use App\Http\Controllers\InquiryController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\ServiceTypeController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserRoleController;
 use Illuminate\Support\Facades\Route;
 
@@ -47,6 +48,10 @@ Route::group(['middleware' => 'api'], function () {
     Route::apiResource('service_types', ServiceTypeController::class);
     Route::apiResource('services', ServiceController::class);
     Route::apiResource('user/roles', UserRoleController::class);
+    Route::prefix('users')->group(function () {
+        Route::apiResource('/', UserController::class);
+        Route::post('/storeClinicOwner', [UserController::class, 'storeClinicOwner']);
+    });
 });
 
 // media upload test

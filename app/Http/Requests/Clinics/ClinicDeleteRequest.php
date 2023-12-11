@@ -1,18 +1,23 @@
 <?php
 
-namespace App\Http\Requests\Authentication;
+namespace App\Http\Requests\Clinics;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
-class ForgotPassword extends FormRequest
+class ClinicDeleteRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        $user = Auth::user();
+        if ($user and $user->role === 'admin') {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -23,7 +28,7 @@ class ForgotPassword extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|email|exists:users,email'
+            //
         ];
     }
 }

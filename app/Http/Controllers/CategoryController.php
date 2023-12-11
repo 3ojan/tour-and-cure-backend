@@ -24,7 +24,7 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Categories\ViewAll $request)
+    public function index(Categories\CategoryViewAllRequest $request)
     {
         $categories = Category::where('parent_id', null)
             ->orderBy('code')
@@ -36,7 +36,7 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Categories\Store $request)
+    public function store(Categories\CategoryStoreRequest $request)
     {
         $category = Category::create($request->validated());
 
@@ -46,7 +46,7 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Categories\View $request, Category $category)
+    public function show(Categories\CategoryViewRequest $request, Category $category)
     {
         return $this->success(new CategoryResource($category), 'Category fetched successfully');
     }
@@ -54,7 +54,7 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Categories\Update $request, Category $category)
+    public function update(Categories\CategoryUpdateRequest $request, Category $category)
     {
         $category->update($request->validated());
 
@@ -64,7 +64,7 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Categories\Delete $request,Category $category)
+    public function destroy(Categories\CategoryDeleteRequest $request, Category $category)
     {
         $category->delete();
 

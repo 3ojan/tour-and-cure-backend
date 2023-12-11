@@ -1,18 +1,23 @@
 <?php
 
-namespace App\Http\Requests\Authentication;
+namespace App\Http\Requests\Categories;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
-class ResetPassword extends FormRequest
+class CategoryUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
+        $user = Auth::user();
+        if ($user and $user->role === 'admin') {
         return true;
+        }
+        return false;
     }
 
     /**
@@ -23,9 +28,10 @@ class ResetPassword extends FormRequest
     public function rules(): array
     {
         return [
-            'token' => 'required|exists:password_resets,token',
-            'password' => 'required|required_with:password_confirmation|min:8|string|confirmed',
-            'password_confirmation' => 'required|required_with:password|same:password|string',
+            'code' => 'sometimes|string',
+            'en' => 'sometimes|string',
+            'hr' => 'sometimes|string',
+            'parent_id' => 'sometimes|string'
         ];
     }
 }

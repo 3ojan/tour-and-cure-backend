@@ -6,7 +6,7 @@ use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class Store extends FormRequest
+class CategoryViewRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -15,7 +15,7 @@ class Store extends FormRequest
     {
         $user = Auth::user();
         if ($user and $user->role === 'admin') {
-        return true;
+            return true;
         }
         return false;
     }
@@ -28,10 +28,7 @@ class Store extends FormRequest
     public function rules(): array
     {
         return [
-            'code' => 'required|string',
-            'en' => 'required|string',
-            'hr' => 'required|string',
-            'parent_id' => 'sometimes|nullable|string'
+            //
         ];
     }
 }

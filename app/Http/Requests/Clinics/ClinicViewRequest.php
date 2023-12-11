@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Categories;
+namespace App\Http\Requests\Clinics;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ViewAll extends FormRequest
+class ClinicViewRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

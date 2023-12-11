@@ -4,20 +4,15 @@ namespace App\Http\Requests\Categories;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
 
-class Update extends FormRequest
+class CategoryViewAllRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        $user = Auth::user();
-        if ($user and $user->role === 'admin') {
         return true;
-        }
-        return false;
     }
 
     /**
@@ -28,10 +23,7 @@ class Update extends FormRequest
     public function rules(): array
     {
         return [
-            'code' => 'sometimes|string',
-            'en' => 'sometimes|string',
-            'hr' => 'sometimes|string',
-            'parent_id' => 'sometimes|string'
+            //
         ];
     }
 }

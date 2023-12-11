@@ -6,7 +6,7 @@ use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class View extends FormRequest
+class CategoryDeleteRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -15,7 +15,7 @@ class View extends FormRequest
     {
         $user = Auth::user();
         if ($user and $user->role === 'admin') {
-            return true;
+        return true;
         }
         return false;
     }
