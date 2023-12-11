@@ -23,11 +23,14 @@ class ClinicController extends Controller
      */
     public function index(Clinics\ClinicViewAllRequest $request)
     {
-        $perPage = $request->input('per_page', 2);
+        $perPage = $request->input('per_page', 20);
 
         $clinics = Clinic::paginate($perPage);
 
-        return $this->success(ClinicResource::collection($clinics)->response()->getData(), 'Clinics fetched successfully');
+        return response()->json(array_merge([
+            'status' => 'Success',
+            'message' => 'All clinics fetched successfully!',
+        ], ClinicResource::collection($clinics)->toArray()), 200, [], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     }
 
     /**
@@ -85,7 +88,7 @@ class ClinicController extends Controller
 
         $clinic->refresh();
 
-        return $this->success(new ClinicResource($clinic), 'Clinic successfully updated!');
+        return $this->success(new ClinicResource($clinic), 'Clinic updated successfully!');
     }
 
     /**
@@ -100,6 +103,6 @@ class ClinicController extends Controller
     {
         $clinic->delete();
 
-        return $this->success('', 'Clinic successfully deleted!');
+        return $this->success('', 'Clinic deleted successfully!');
     }
 }
