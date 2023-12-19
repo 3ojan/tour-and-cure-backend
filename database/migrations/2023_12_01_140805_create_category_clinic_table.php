@@ -12,10 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('category_clinic', function (Blueprint $table) {
-            $table->id();
             $table->uuid('category_id');
             $table->uuid('clinic_id');
-            $table->timestamps();
         });
     }
 

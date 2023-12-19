@@ -15,8 +15,14 @@ class ClinicUpdateRequest extends FormRequest
     public function authorize(): bool
     {
         $user = Auth::user();
-        if ($user and $user->role === 'admin|clinic_owner') {
+        if ($user and $user->role === 'admin') {
             return true;
+        } elseif ($user and $user->role === 'clinic_owner') {
+            $clinic = $this->route('clinic');
+            if ($clinic->id === $user->clinic_id) {
+                return true;
+            }
+            return false;
         }
         return false;
     }

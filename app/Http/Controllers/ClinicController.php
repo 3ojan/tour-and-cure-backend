@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ClinicResource;
 use App\Models\Clinic;
 use App\Http\Requests\Clinics;
-use App\Http\Requests\Users;
+use App\Http\Requests\EmployeesUsersClinics;
 use App\Traits\HttpResponses;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -44,13 +44,13 @@ class ClinicController extends Controller
     }
 
     /**
-     * Store a newly created resource.
+     * Store a newly created clinic resource and return $clinic to UserController.
      *
-     * @param Users\UserStoreClinicOwnerRequest $request
+     * @param EmployeesUsersClinics\EmployeeUserClinicStoreRequest $request
      *
      * @return JsonResponse
      */
-    public function store(Users\UserStoreClinicOwnerRequest $request)
+    public function store(EmployeesUsersClinics\EmployeeUserClinicStoreRequest $request)
     {
         $clinic = Clinic::create([
             'name' => $request->clinic_name,
@@ -62,6 +62,8 @@ class ClinicController extends Controller
         ]);
 
         $clinic->categories()->sync($request->validated('category_ids', []));
+
+        $clinic->refresh();
 
         return $clinic;
     }
@@ -98,6 +100,11 @@ class ClinicController extends Controller
      */
     public function destroy(Clinics\ClinicDeleteRequest $request, Clinic $clinic)
     {
+        // delete media related to this user, in public folder and media_files table
+        if ($clinic->media) {
+            app(MediaController::class)->destroy($clinic);
+        }
+
         $clinic->delete();
 
         return $this->success('', 'Clinic successfully deleted!');
