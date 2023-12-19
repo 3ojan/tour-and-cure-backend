@@ -23,4 +23,19 @@ class UserResource extends JsonResource
             'permissions' => $this->permissions
         ];
     }
+
+    public static function collection($data)
+    {
+        if (is_a($data, \Illuminate\Pagination\AbstractPaginator::class)) {
+            $data->setCollection(
+                $data->getCollection()->map(function ($listing) {
+                    return new static($listing);
+                })
+            );
+
+            return $data;
+        }
+
+        return parent::collection($data);
+    }
 }
