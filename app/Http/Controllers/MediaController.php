@@ -2,21 +2,115 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\EmployeesUsersClinics;
+use App\Models\Model;
+use App\Traits\HttpResponses;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\LogoImage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class MediaController extends Controller
 {
+    use HttpResponses;
+
     /**
      * Upload file
+     *
+     * @param $file
+     * @return string
      */
-    public function uploadFile(Request $request): string
+    private function uploadFile($file): string
     {
-        $path = $request->file('file')->store('files');
+        $fileName = Str::uuid() . '.' . $file->getClientOriginalExtension();
+        $file->storeAs('public', $fileName);
 
-        return $path;
+        return 'storage' . DIRECTORY_SEPARATOR . $fileName;
     }
+
+    /**
+     * Store file information to Media_types table and associate with employee.
+     *
+     * @param EmployeesUsersClinics\EmployeeUserClinicStoreRequest $request
+     * @param Model $model
+     * @return JsonResponse
+     */
+    public function store(EmployeesUsersClinics\EmployeeUserClinicStoreRequest $request, Model $model): JsonResponse
+    {
+        $fileAttribute = key($request->file());
+        $file = $request->file($fileAttribute);
+
+        $path = app(MediaController::class)->uploadFile($file);
+
+        $model->media()->create([
+            'mimetype' => $file->getMimeType(),
+            'name' => $file->getClientOriginalName(),
+            'ext' => $file->getClientOriginalExtension(),
+            'path' => $path,
+            'size' => $file->getSize(),
+            'attribute_name' => $fileAttribute,
+        ]);
+
+        return $this->success('','File stored successfully!');
+    }
+
+    /**
+     * Update file information on Media_types table associated with specific employee.
+     *
+     * @param EmployeesUsersClinics\EmployeeUserClinicStoreRequest $request
+     * @param Model $model
+     * @return JsonResponse
+     */
+    public function update(Request $request, Model $model)
+    {
+        $fileAttribute = key($request->file());
+        $file = $request->file($fileAttribute);
+        $media = $model->media;
+
+        if ($media) {
+            app(MediaController::class)->destroyPath($media->path);
+        }
+
+        $path = app(MediaController::class)->uploadFile($file);
+
+        $model->media()->update([
+            'mimetype' => $file->getMimeType(),
+            'name' => $file->getClientOriginalName(),
+            'ext' => $file->getClientOriginalExtension(),
+            'path' => $path,
+            'size' => $file->getSize(),
+            'attribute_name' => $fileAttribute,
+        ]);
+
+        return $this->success('','File updated successfully!');
+    }
+
+    private function destroyFile($path)
+    {
+        $file = str_replace('storage/', '', $path);
+
+        Storage::disk('public')->delete($file);
+
+        return response()->json(['message' => 'Media file deleted successfully']);
+    }
+
+    public function destroy(Request $request, Model $model)
+    {
+        $media = $model->media;
+
+        if ($media) {
+            app(MediaController::class)->destroyFile($media->path);
+
+            $media->delete();
+
+            return response()->json(['message' => 'Media record deleted successfully']);
+        }
+
+        return response()->json(['message' => 'Media record not found'], 404);
+    }
+
     public function uploadLogo(Request $request): string
     {
         \Log::info('request: ' . $request);
@@ -52,42 +146,3 @@ class MediaController extends Controller
         ], 201);
     }
 }
-
-/*
-class ImageUploadController extends Controller
-{
-    public function updateProfilePicture(Request $request) {
-        $image = $request->file('profileImage');
-
-        // Stores the Image into a folder called Avatars, 
-        // image name is generated and assigned to $path
-        // disk("public") is the local directory storage/app/public
-
-        $details = new UserDetail;
-        $path = Storage::disk('public')->put('avatars', $image);
-        $details->avatar = $path;
-
-        $user = User::find(auth()->user()->id);
-
-        $user->details()->updateOrCreate(['user_id' => auth()->user()->id],
-        ['avatar'=> $path]);
-
-        error_log('File Name: '.$image->getClientOriginalName());
-        error_log('File Extension: '.$image->getClientOriginalExtension());
-        error_log('File Real Path: '.$image->getRealPath());
-        error_log('File Size: '.$image->getSize());
-        error_log('File Mime Type: '.$image->getMimeType());
-        error_log($path);
-
-        return response()->json($path);
-
-
-     }
-
-     public function getProfilePicture(Request $request) {
-        $user = User::find(auth()->user()->id);
-        $avatar = User::find(1)->avatar;
-
-     }
-}
-*/

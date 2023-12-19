@@ -8,6 +8,7 @@
 - dodati Sail u root: `alias sail='bash vendor/bin/sail'`
 
 - pokretanje kontejnera: `sail up`
+- symlink: `sail artisan storage:link`
 - migracije i seedanje baze: `sail artisan migrate --seed` 
 
 ## Help
