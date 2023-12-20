@@ -88,10 +88,10 @@ class EmployeeUserClinicStoreRequest extends FormRequest
             'password' => 'required|required_with:password_confirmation|min:8|string|confirmed',
             'password_confirmation' => 'required|required_with:password|same:password|string',
 
-            'description' => 'sometimes|string|max:255',
-            'phone' => 'sometimes|string',
-            'type' => 'sometimes|string|max:255',
-            'picture' => 'sometimes|exists:media_files,id',
+            'employee_description' => 'sometimes|string|max:255',
+            'employee_phone' => 'sometimes|string',
+            'employee_type' => 'sometimes|string|max:255',
+            'employee_picture' => 'sometimes|exists:media_files,id',
 
             'clinic_name' => 'required|string|unique:clinics,name',
             'clinic_address' => 'required|string',
