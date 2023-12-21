@@ -13,7 +13,7 @@ class Media extends Model
     protected $table = 'media_files';
 
     protected $fillable = [
-        'type',
+        'mimetype',
         'name',
         'path',
         'ext',
@@ -21,5 +21,13 @@ class Media extends Model
         'original_id',
         'width',
         'height',
+        'model',
+        'model_id',
+        'attribute_name'
     ];
+
+    public function model()
+    {
+        return $this->morphTo();
+    }
 }

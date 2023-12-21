@@ -4,7 +4,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ClinicController;
 use App\Http\Controllers\CountryController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\InquiryController;
+use App\Http\Controllers\MediaController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\ServiceTypeController;
 use App\Http\Controllers\UserController;
@@ -44,19 +46,17 @@ Route::group(['middleware' => 'api'], function () {
     Route::apiResource('categories', CategoryController::class);
     Route::apiResource('clinics', ClinicController::class);
     Route::apiResource('countries', CountryController::class);
+    Route::apiResource('employees', EmployeeController::class);
     Route::apiResource('inquiries', InquiryController::class);
-    Route::apiResource('service_types', ServiceTypeController::class);
     Route::apiResource('services', ServiceController::class);
+    Route::apiResource('service_types', ServiceTypeController::class);
+    Route::apiResource('users', UserController::class);
     Route::apiResource('user/roles', UserRoleController::class);
-    Route::prefix('users')->group(function () {
-        Route::apiResource('/', UserController::class);
-        Route::post('/storeClinicOwner', [UserController::class, 'storeClinicOwner']);
+    Route::prefix('mediaFiles')->group(function () {
+        Route::post('/store', [MediaController::class, 'store']);
+        Route::post('/update/{model}', [MediaController::class, 'update']);
     });
 });
-
-// media upload test
-Route::post('/media/upload', [App\Http\Controllers\MediaController::class, 'uploadFile']);
-Route::post('/media/upload/logo', [App\Http\Controllers\MediaController::class, 'uploadLogo']);
 
 // not found
 Route::fallback(function () {

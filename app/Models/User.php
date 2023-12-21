@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -25,7 +26,8 @@ class User extends Authenticatable implements JWTSubject
         'name',
         'email',
         'password',
-        'clinic_id'
+        'clinic_id',
+        'role'
     ];
 
     /**
@@ -116,6 +118,15 @@ class User extends Authenticatable implements JWTSubject
     public function userRole(): BelongsTo
     {
         return $this->belongsTo(UserRole::class, 'role', 'name');
+    }
+
+    /**
+     * Define user-employee relation
+     *
+     * @return HasOne
+     */
+    public function employee() {
+        return $this->hasOne(Employee::class);
     }
 
     /**
