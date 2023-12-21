@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Clinic extends Model
 {
@@ -112,5 +113,24 @@ class Clinic extends Model
     public function updatedBy()
     {
         return $this->belongsTo(User::class, 'updated_by');
+    }
+
+    /**
+     * Define clinic-employees relation
+     *
+     * @return HasMany
+     */
+    public function employees() {
+        return $this->hasMany(Employee::class);
+    }
+
+    /**
+     * Define clinic->media relation
+     *
+     * @return MorphOne
+     */
+    public function media()
+    {
+        return $this->morphOne(Media::class, 'model');
     }
 }
