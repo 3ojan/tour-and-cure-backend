@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\EmployeesUsersClinics;
+use App\Models\Media;
 use App\Models\Model;
 use App\Traits\HttpResponses;
 use Illuminate\Http\JsonResponse;
@@ -37,14 +38,14 @@ class MediaController extends Controller
      * @param Model $model
      * @return JsonResponse
      */
-    public function store(EmployeesUsersClinics\EmployeeUserClinicStoreRequest $request, Model $model): JsonResponse
+    public function store(EmployeesUsersClinics\EmployeeUserClinicStoreRequest $request): JsonResponse
     {
         $fileAttribute = key($request->file());
         $file = $request->file($fileAttribute);
 
         $path = app(MediaController::class)->uploadFile($file);
 
-        $model->media()->create([
+        $media = Media::create([
             'mimetype' => $file->getMimeType(),
             'name' => $file->getClientOriginalName(),
             'ext' => $file->getClientOriginalExtension(),
@@ -53,7 +54,7 @@ class MediaController extends Controller
             'attribute_name' => $fileAttribute,
         ]);
 
-        return $this->success('','File stored successfully!');
+        return $this->success($media,'File stored successfully!');
     }
 
     /**
