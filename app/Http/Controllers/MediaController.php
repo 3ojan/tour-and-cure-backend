@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\EmployeesUsersClinics;
+use App\Http\Requests\MediaFiles;
 use App\Models\Media;
 use App\Models\Model;
 use App\Traits\HttpResponses;
@@ -34,11 +35,10 @@ class MediaController extends Controller
     /**
      * Store file information to Media_types table and associate with employee.
      *
-     * @param EmployeesUsersClinics\EmployeeUserClinicStoreRequest $request
-     * @param Model $model
+     * @param MediaFiles\MediaFileStoreRequest $request
      * @return JsonResponse
      */
-    public function store(EmployeesUsersClinics\EmployeeUserClinicStoreRequest $request): JsonResponse
+    public function store(MediaFiles\MediaFileStoreRequest $request): JsonResponse
     {
         $fileAttribute = key($request->file());
         $file = $request->file($fileAttribute);
@@ -54,7 +54,7 @@ class MediaController extends Controller
             'attribute_name' => $fileAttribute,
         ]);
 
-        return $this->success($media,'File stored successfully!');
+        return $this->success($media->id,'File stored successfully!');
     }
 
     /**
