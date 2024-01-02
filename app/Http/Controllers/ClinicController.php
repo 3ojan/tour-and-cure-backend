@@ -27,8 +27,10 @@ class ClinicController extends Controller
 
         $clinics = Clinic::paginate($perPage);
 
-        // Return only the 'data' part of the paginated response
-        return response()->json($clinics->items(), 200, [], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        return response()->json(array_merge([
+            'status' => 'Success',
+            'message' => 'All clinics fetched successfully!',
+        ], ClinicResource::collection($clinics)->toArray()), 200, [], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     }
 
     /**
@@ -58,8 +60,6 @@ class ClinicController extends Controller
             'address' => $request->clinic_address,
             'postcode' => $request->clinic_postcode,
             'city' => $request->clinic_city,
-            'latitude' => $request->clinic_latitude,
-            'longitude' => $request->clinic_longitude,
             'country_id' => $request->clinic_country_id,
             'created_by' => Auth::user()->id
         ]);
