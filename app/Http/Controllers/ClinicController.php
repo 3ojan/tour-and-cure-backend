@@ -60,6 +60,8 @@ class ClinicController extends Controller
             'address' => $request->clinic_address,
             'postcode' => $request->clinic_postcode,
             'city' => $request->clinic_city,
+            'latitude' => $request->clinic_latitude,
+            'longitude' => $request->clinic_longitude,
             'country_id' => $request->clinic_country_id,
             'created_by' => Auth::user()->id
         ]);

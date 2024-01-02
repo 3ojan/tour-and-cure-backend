@@ -97,6 +97,8 @@ class EmployeeUserClinicStoreRequest extends FormRequest
             'clinic_address' => 'required|string',
             'clinic_postcode' => 'required|string',
             'clinic_city' => 'required|string',
+            'clinic_latitude' => 'required|numeric|between:-90,90',
+            'clinic_longitude' => 'required|numeric|between:-180,180',
             'clinic_country_id' => 'required|string|exists:countries,id',
             'category_ids' => 'required|array',
             'category_ids.*' => 'exists:categories,id'
