@@ -31,7 +31,7 @@ class EmployeeUserClinicStoreRequest extends FormRequest
     {
         if ($this->has('clinic_id')) {
             return $this->getClinicUserSet();
-        } elseif ($this->hasFile('your_file_input_name') && count($this->all()) === 1) {
+        } elseif ($this->hasFile('profile_picture') && count($this->all()) === 1) {
             return $this->getFileSet();
         } else {
             return $this->getClinicOwnerSet();
@@ -59,7 +59,7 @@ class EmployeeUserClinicStoreRequest extends FormRequest
             'employee_description' => 'sometimes|string|max:255',
             'employee_phone' => 'sometimes|string',
             'employee_type' => 'sometimes|string|max:255',
-            'profile_picture' => 'sometimes|file|max:10240|mimes:jpeg,png,gif,webp'
+            'employee_picture' => 'sometimes|exists:media_files,id',
         ];
     }
 

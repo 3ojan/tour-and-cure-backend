@@ -27,7 +27,7 @@ class MediaFileStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'file' => 'required|file|max:10240|mimes:jpeg,png,gif,webp',
+            '*' => 'required|image|max:10240|mimes:jpeg,png,gif,webp',
         ];
     }
 }

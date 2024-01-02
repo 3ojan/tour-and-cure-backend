@@ -7,6 +7,7 @@ use App\Http\Requests\EmployeesUsers;
 use App\Http\Requests\EmployeesUsersClinics;
 use App\Http\Resources\EmployeeResource;
 use App\Models\Employee;
+use App\Models\Media;
 use App\Models\User;
 use App\Traits\HttpResponses;
 
@@ -53,8 +54,14 @@ class EmployeeController extends Controller
             'type' => $request->employee->type ?? null
         ]);
 
-        if ($request->hasFile('profile_picture')) {
-            app(MediaController::class)->store($request, $employee);
+        if ($request->has('employee_picture')) {
+            $uuid = $request->employee_picture;
+
+            $media = Media::where('id', $uuid)->first();
+
+            if ($media) {
+                $employee->media()->save($media);
+            }
         }
 
         $employee->refresh();

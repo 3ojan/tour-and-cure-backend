@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('media_files', function (Blueprint $table) {
-            $table->string('model_type');
-            $table->uuid('model_id');
+            $table->string('model_type')->nullable();
+            $table->uuid('model_id')->nullable();
             $table->string('attribute_name');
         });
     }
