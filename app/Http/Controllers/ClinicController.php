@@ -27,10 +27,8 @@ class ClinicController extends Controller
 
         $clinics = Clinic::paginate($perPage);
 
-        return response()->json(array_merge([
-            'status' => 'Success',
-            'message' => 'All clinics fetched successfully!',
-        ], ClinicResource::collection($clinics)->toArray()), 200, [], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        // Return only the 'data' part of the paginated response
+        return response()->json($clinics->items(), 200, [], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     }
 
     /**
