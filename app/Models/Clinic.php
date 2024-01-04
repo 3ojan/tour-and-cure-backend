@@ -38,22 +38,11 @@ class Clinic extends Model
 
         'created_by',
         'updated_by',
-
-        'logo_image_id'
     ];
 
     // Automatically load necessary relations
-    protected $with = ['logoImage', 'country', 'categories', 'createdBy', 'updatedBy'];
+    protected $with = ['country', 'categories', 'createdBy', 'updatedBy'];
 
-    /**
-     * Define clinic-service_type relation
-     *
-     * @return BelongsToMany
-     */
-    public function serviceTypes(): BelongsToMany
-    {
-        return $this->belongsToMany(ServiceType::class, 'clinic_service_type', 'clinic_id', 'service_type_id');
-    }
 
     /**
      * Define clinic-category relation
@@ -73,16 +62,6 @@ class Clinic extends Model
     public function users(): HasMany
     {
         return $this->hasMany(User::class);
-    }
-
-    /**
-     * Define clinic-logo relation
-     *
-     * @return BelongsTo
-     */
-    public function logoImage()
-    {
-        return $this->belongsTo('App\Models\LogoImage', 'logo_image_id')->withDefault();
     }
 
     /**
