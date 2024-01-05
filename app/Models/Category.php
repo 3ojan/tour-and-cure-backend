@@ -62,4 +62,14 @@ class Category extends Model
     {
         return $this->belongsToMany(Clinic::class, 'clinic_service_type', 'category_id', 'clinic_id');
     }
+
+    /**
+     * Define user-inquiry relation
+     *
+     * @return HasMany
+     */
+    public function inquiries(): HasMany
+    {
+        return $this->hasMany(Inquiry::class);
+    }
 }
