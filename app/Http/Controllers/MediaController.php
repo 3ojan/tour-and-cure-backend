@@ -9,14 +9,17 @@ use App\Models\Model;
 use App\Traits\HttpResponses;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use App\Models\LogoImage;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class MediaController extends Controller
 {
     use HttpResponses;
+
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
 
     /**
      * Upload file
@@ -110,40 +113,5 @@ class MediaController extends Controller
         }
 
         return response()->json(['message' => 'Media record not found'], 404);
-    }
-
-    public function uploadLogo(Request $request): string
-    {
-        \Log::info('request: ' . $request);
-        if ($request->hasFile('file')) {
-            $file = $request->file('file');
-            \Log::info('File Name: ' . $file->getClientOriginalName());
-            \Log::info('File Extension: ' . $file->getClientOriginalExtension());
-            \Log::info('File Real Path: ' . $file->getRealPath());
-            \Log::info('File Size: ' . $file->getSize());
-            \Log::info('File Mime Type: ' . $file->getMimeType());
-        }
-        if ($request->file('file')->isValid()) {
-            \Log::info("File upload was successful!");
-        } else {
-            \Log::info("File upload encountered an error: " . $request->file('file')->getErrorMessage());
-        }
-        $path = $request->file('file')->store('files/logos');
-        // Save the path to the LogoImage model
-        $info = pathinfo($path);
-        $directory = $info['dirname'];
-        $fileName = $info['basename'];
-
-        $logo = LogoImage::create([
-            'file_name' => $fileName,
-            'path' => $directory,
-            'user_id' => Auth::id(),
-        ]);
-
-        // Return a response to the client
-        return response()->json([
-            'message' => 'Logo uploaded and saved successfully!',
-            'response' => $logo,
-        ], 201);
     }
 }

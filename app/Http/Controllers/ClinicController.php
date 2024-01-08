@@ -12,6 +12,16 @@ use Illuminate\Support\Facades\Auth;
 
 class ClinicController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api', [
+            'except' => [
+                'index',
+                'show'
+            ]
+        ]);
+    }
+
     use HttpResponses;
 
     /**

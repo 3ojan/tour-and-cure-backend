@@ -8,6 +8,11 @@ use App\Http\Requests\UserRoleRequest;
 
 class UserRoleController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
+
     public function index()
     {
         return UserRole::all();

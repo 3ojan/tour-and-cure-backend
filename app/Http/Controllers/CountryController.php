@@ -7,6 +7,16 @@ use Illuminate\Http\Request;
 
 class CountryController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api', [
+            'except' => [
+                'index',
+                'show'
+            ]
+        ]);
+    }
+
     public function index()
     {
         return Country::all();

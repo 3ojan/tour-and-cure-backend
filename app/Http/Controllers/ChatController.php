@@ -10,6 +10,10 @@ use App\Models\User;
 
 class ChatController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
     //
     public function test()
     {

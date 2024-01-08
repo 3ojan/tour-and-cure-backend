@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Category;
+use App\Models\Country;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
@@ -41,10 +43,11 @@ class ClinicSeeder extends Seeder
 
         Clinic::factory(5)->create();
 
-        $service_types = ServiceType::all();
-        Clinic::all()->each(function ($clinic) use ($service_types) {
-            $clinic->serviceTypes()->attach(
-                $service_types->random(rand(1, 10))->pluck('id')->toArray()
+        $categories = Category::all();
+
+        Clinic::all()->each(function ($clinic) use ($categories) {
+            $clinic->categories()->attach(
+                $categories->random(rand(1, 10))->pluck('id')->toArray()
             );
         });
     }
