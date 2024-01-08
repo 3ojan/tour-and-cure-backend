@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('inquiries', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->timestamps();
-            $table->uuid('user_id')->nullable();
-            $table->uuid('service_type_id');
+            $table->foreignUuid('user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignUuid('category_id')->constrained('categories')->cascadeOnDelete();
+            $table->boolean('is_closed')->default(false);
             $table->json('form_json');
+            $table->timestamps();
         });
     }
 

@@ -156,4 +156,44 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(Provider::class,'user_id','id');
     }
+
+    /**
+     * Check if the user has the 'admin' role.
+     *
+     * @return bool
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    /**
+     * Check if the user has the 'clinic_owner' role.
+     *
+     * @return bool
+     */
+    public function isClinicOwner(): bool
+    {
+        return $this->role === 'clinic_owner';
+    }
+
+    /**
+     * Check if the user has the 'clinic_user' role.
+     *
+     * @return bool
+     */
+    public function isClinicUser(): bool
+    {
+        return $this->role === 'clinic_user';
+    }
+
+    /**
+     * Check if the user has the 'clinic_user' role.
+     *
+     * @return bool
+     */
+    public function isPatient(): bool
+    {
+        return $this->role === 'user';
+    }
 }
