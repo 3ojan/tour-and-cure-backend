@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ClinicController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\InquiryController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\ServiceController;
@@ -47,6 +48,7 @@ Route::group(['middleware' => 'api'], function () {
     Route::apiResource('clinics', ClinicController::class);
     Route::apiResource('countries', CountryController::class);
     Route::apiResource('employees', EmployeeController::class);
+    Route::apiResource('events', EventController::class);
     Route::apiResource('inquiries', InquiryController::class);
     Route::apiResource('services', ServiceController::class);
     Route::apiResource('service_types', ServiceTypeController::class);

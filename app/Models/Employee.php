@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Employee extends Model
@@ -43,5 +44,15 @@ class Employee extends Model
     public function media()
     {
         return $this->morphOne(Media::class, 'model');
+    }
+
+    /**
+     * Define employee-event relation
+     *
+     * @return BelongsToMany
+     */
+    public function events(): BelongsToMany
+    {
+        return $this->belongsToMany(Event::class, 'employee_event', 'employee_id', 'event_id');
     }
 }
