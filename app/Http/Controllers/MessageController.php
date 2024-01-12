@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ContactResource;
-use App\Http\Resources\MessageResource;
+use App\Http\Resources\MessageResourceCollection;
 use App\Models\Message;
 use App\Models\User;
 use App\Traits\HttpResponses;
@@ -50,6 +50,6 @@ class MessageController extends Controller
                 ->orWhere('sender_id', $contact_id)->where('receiver_id', $user_id);
         })->orderBy('created_at', 'asc')->get();
 
-        return $this->success(MessageResource::collection($messages), 'Chat fetched successfully!');
+        return $this->success(new MessageResourceCollection($messages, $contact_id, $contact->name), 'Chat fetched successfully!');
     }
 }
