@@ -8,6 +8,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\InquiryController;
 use App\Http\Controllers\MediaController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\ServiceTypeController;
 use App\Http\Controllers\UserController;
@@ -57,6 +58,10 @@ Route::group(['middleware' => 'api'], function () {
     Route::prefix('mediaFiles')->group(function () {
         Route::post('/store', [MediaController::class, 'store']);
         Route::post('/update/{model}', [MediaController::class, 'update']);
+    });
+    Route::prefix('messages')->group(function () {
+        Route::get('/contacts', [MessageController::class, 'contacts']);
+        Route::get('/chat/{contact}', [MessageController::class, 'chat']);
     });
 });
 
