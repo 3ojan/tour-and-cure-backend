@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('messages', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->foreignUuid('sender_id')->constrained('users');
-            $table->foreignUuid('receiver_id')->constrained('users');
-            $table->mediumText('message');
-            $table->timestamps();
+        Schema::create('employee_event', function (Blueprint $table) {
+            $table->uuid('employee_id');
+            $table->uuid('event_id');
         });
     }
 
@@ -25,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('messages');
+        Schema::dropIfExists('employee_event');
     }
 };

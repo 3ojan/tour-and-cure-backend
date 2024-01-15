@@ -196,4 +196,14 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->role === 'user';
     }
+
+    /**
+     * Define user-message relation
+     * @return HasMany
+     */
+    public function messages()
+    {
+        return $this->hasMany(Message::class, 'sender_id')
+            ->orWhere('receiver_id', $this->id);
+    }
 }
