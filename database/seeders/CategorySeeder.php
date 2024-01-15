@@ -15,223 +15,159 @@ class CategorySeeder extends Seeder
     {
         $categories = [
             [
-                'code' => 'AESTHETIC_SURGERY',
-                'hr' => 'Estetska kirurgija',
-                'en' => 'Aesthetic surgery'
-            ],
-            [
-                'code' => 'AMBULANCE_SERVICES',
-                'hr' => 'Sanitetski prijevoz',
-                'en' => 'Ambulance services'
-            ],
-            [
-                'code' => 'ANESTHESIOLOGY',
-                'hr' => 'Anesteziologija',
-                'en' => 'Anesthesiology'
-            ],
-            [
-                'code' => 'ASSOCIATIONS',
-                'hr' => 'Udruge',
-                'en' => 'Associations'
-            ],
-            [
-                'code' => 'CARDIOLOGY',
-                'hr' => 'Kardiologija',
-                'en' => 'Cardiology'
-            ],
-            [
-                'code' => 'DEFECTOLOGY',
-                'hr' => 'Defektologija',
-                'en' => 'Defectology'
-            ],
-            [
                 'code' => 'DENTISTRY',
                 'hr' => 'Stomatologija',
                 'en' => 'Dentistry'
             ],
-            [
-                'code' => 'DERMATOLOGY_AND_VENEREOLOGY',
-                'hr' => 'Dermatovenerologija',
-                'en' => 'Dermatology and venereology'
-            ],
-            [
-                'code' => 'DIALYSIS',
-                'hr' => 'Dijaliza',
-                'en' => 'Dialysis'
-            ],
-            [
-                'code' => 'FAMILY_MEDICINE',
-                'hr' => 'Obiteljska medicina',
-                'en' => 'Family medicine'
-            ],
-            [
-                'code' => 'GASTROENTEROLOGY',
-                'hr' => 'Gastroenterologija',
-                'en' => 'Gastroenterology'
-            ],
-            [
-                'code' => 'GYNECOLOGY',
-                'hr' => 'Ginekologija',
-                'en' => 'Gynecology'
-            ],
-            [
-                'code' => 'HALOTHERAPY',
-                'hr' => 'Haloterapija',
-                'en' => 'Halotherapy'
-            ],
-            [
-                'code' => 'HOME_HEALTH_CARE',
-                'hr' => 'Zdravstvena njega u kući',
-                'en' => 'Home health care'
-            ],
-            [
-                'code' => 'HOMEOPATHY',
-                'hr' => 'Homeopatija',
-                'en' => 'Homeopathy'
-            ],
-            [
-                'code' => 'HOSPITALS',
-                'hr' => 'Bolnice',
-                'en' => 'Hospitals'
-            ],
-            [
-                'code' => 'INFECTOLOGY',
-                'hr' => 'Infektologija',
-                'en' => 'Infectology'
-            ],
-            [
-                'code' => 'INTERNAL_MEDICINE',
-                'hr' => 'Interna medicina',
-                'en' => 'Internal medicine'
-            ],
-            [
-                'code' => 'LABORATORY',
-                'hr' => 'Laboratorij',
-                'en' => 'Laboratory'
-            ],
-            [
-                'code' => 'MEDICAL_AIDS',
-                'hr' => 'Medicinska pomagala',
-                'en' => 'Medical aids'
-            ],
-            [
-                'code' => 'NEUROLOGY',
-                'hr' => 'Neurologija',
-                'en' => 'Neurology'
-            ],
-            [
-                'code' => 'NUCLEAR_MEDICINE',
-                'hr' => 'Nuklearna medicina',
-                'en' => 'Nuclear medicine'
-            ],
-            [
-                'code' => 'OCCUPATIONAL_MEDICINE',
-                'hr' => 'Medicina rada',
-                'en' => 'Occupational medicine'
-            ],
-            [
-                'code' => 'ONCOLOGY',
-                'hr' => 'Onkologija',
-                'en' => 'Oncology'
-            ],
-            [
-                'code' => 'OPHTHALMOLOGY',
-                'hr' => 'Oftalmologija',
-                'en' => 'Ophthalmology'
-            ],
-            [
-                'code' => 'OPTICS',
-                'hr' => 'Optika',
-                'en' => 'Optics'
-            ],
-            [
-                'code' => 'ORTHODONTICS',
-                'hr' => 'Ortodoncija',
-                'en' => 'Orthodontics'
-            ],
+                [
+                    'code' => 'ORTHODONTICS',
+                    'hr' => 'Ortodoncija',
+                    'en' => 'Orthodontics',
+                    'parent_id' => 'DENTISTRY'
+                ],
+
+
             [
                 'code' => 'ORTHOPEDICS',
                 'hr' => 'Ortopedija',
                 'en' => 'Orthopedics'
             ],
+
+
             [
-                'code' => 'OTORHINOLARYNGOLOGY',
-                'hr' => 'Otorinolaringologija',
-                'en' => 'Otorhinolaryngology'
+                'code' => 'AESTHETIC_SURGERY',
+                'hr' => 'Estetska kirurgija',
+                'en' => 'Aesthetic surgery'
             ],
-            [
-                'code' => 'PEDIATRICS',
-                'hr' => 'Pedijatrija',
-                'en' => 'Pediatrics'
-            ],
-            [
-                'code' => 'PHARMACIES',
-                'hr' => 'Ljekarne',
-                'en' => 'Pharmacies'
-            ],
-            [
-                'code' => 'PHYSICAL_MEDICINE_AND_REHABILITATION',
-                'hr' => 'Fizikalna medicina i rehabilitacija',
-                'en' => 'Physical medicine and rehabilitation'
-            ],
-            [
-                'code' => 'PHYSICAL_THERAPY',
-                'hr' => 'Fizikalna terapija',
-                'en' => 'Physical therapy'
-            ],
-            [
-                'code' => 'POLYCLINICS',
-                'hr' => 'Poliklinike',
-                'en' => 'Polyclinics'
-            ],
-            [
-                'code' => 'PSYCHIATRY',
-                'hr' => 'Psihijatrija',
-                'en' => 'Psychiatry'
-            ],
-            [
-                'code' => 'PSYCHOLOGY',
-                'hr' => 'Psihologija',
-                'en' => 'Psychology'
-            ],
-            [
-                'code' => 'PULMONOLOGY',
-                'hr' => 'Pulmologija',
-                'en' => 'Pulmonology'
-            ],
-            [
-                'code' => 'RADIOLOGY',
-                'hr' => 'Radiologija',
-                'en' => 'Radiology'
-            ],
+                [
+                    'code' => 'BARIATRIC_SURGERY',
+                    'hr' => 'Barijatrijska kirurgija',
+                    'en' => 'Bariatric surgery',
+                    'parent_id' => 'AESTHETIC_SURGERY'
+                ],
+
+
             [
                 'code' => 'SURGERY',
                 'hr' => 'Kirurgija',
                 'en' => 'Surgery'
             ],
+
+
             [
-                'code' => 'ULTRASOUND_DIAGNOSTICS',
-                'hr' => 'Ultrazvučna dijagnostika',
-                'en' => 'Ultrasound diagnostics'
+                'code' => 'OPHTHALMOLOGY',
+                'hr' => 'Oftalmologija',
+                'en' => 'Ophthalmology'
             ],
+                [
+                    'code' => 'CORRECTIONS',
+                    'hr' => 'Korekcija vida',
+                    'en' => 'Vision correction',
+                    'parent_id' => 'OPHTHALMOLOGY'
+                ],
+                [
+                    'code' => 'OPTICS',
+                    'hr' => 'Optika',
+                    'en' => 'Optics',
+                    'parent_id' => 'OPHTHALMOLOGY'
+                ],
+
+
             [
-                'code' => 'UROLOGY',
-                'hr' => 'Urologija',
-                'en' => 'Urology'
+                'code' => 'DIAGNOSTICS_AND_NON_INVASIVE_SURGERY',
+                'hr' => 'Diagnostika i ne invazivni zahvati',
+                'en' => 'Diagnostics and non invasive surgery'
             ],
+                [
+                    'code' => 'LABORATORY',
+                    'hr' => 'Laboratorij',
+                    'en' => 'Laboratory',
+                    'parent_id' => 'DIAGNOSTICS_AND_NON_INVASIVE_SURGERY'
+
+                ],
+                [
+                    'code' => 'NUCLEAR_MEDICINE',
+                    'hr' => 'Nuklearna medicina',
+                    'en' => 'Nuclear medicine',
+                    'parent_id' => 'DIAGNOSTICS_AND_NON_INVASIVE_SURGERY'
+
+                ],
+                [
+                    'code' => 'RADIOLOGY',
+                    'hr' => 'Radiologija',
+                    'en' => 'Radiology',
+                    'parent_id' => 'DIAGNOSTICS_AND_NON_INVASIVE_SURGERY'
+                ],
+
+                [
+                    'code' => 'ULTRASOUND_DIAGNOSTICS',
+                    'hr' => 'Ultrazvučna dijagnostika',
+                    'en' => 'Ultrasound diagnostics',
+                    'parent_id' => 'DIAGNOSTICS_AND_NON_INVASIVE_SURGERY'
+                ],
+                [
+                    'code' => 'CARDIOLOGY',
+                    'hr' => 'Kardiologija',
+                    'en' => 'Cardiology',
+                    'parent_id' => 'DIAGNOSTICS_AND_NON_INVASIVE_SURGERY'
+                ],
+                [
+                    'code' => 'OTORHINOLARYNGOLOGY',
+                    'hr' => 'Otorinolaringologija',
+                    'en' => 'Otorhinolaryngology',
+                    'parent_id' => 'DIAGNOSTICS_AND_NON_INVASIVE_SURGERY'
+                ],
+
+
             [
-                'code' => 'NURSING_HOMES',
-                'hr' => 'Domovi za starije i nemoćne',
-                'en' => 'Nursing homes'
+                'code' => 'FERTILITY',
+                'hr' => 'Plodnost',
+                'en' => 'Fertility'
             ],
+                [
+                    'code' => 'GYNECOLOGY',
+                    'hr' => 'Ginekologija',
+                    'en' => 'Gynecology',
+                    'parent_id' => 'FERTILITY'
+                ],
+                [
+                    'code' => 'PEDIATRICS',
+                    'hr' => 'Pedijatrija',
+                    'en' => 'Pediatrics',
+                    'parent_id' => 'FERTILITY'
+                ],
+
+
+            [
+                'code' => 'PHYSICAL_MEDICINE_AND_REHABILITATION',
+                'hr' => 'Fizikalna medicina i rehabilitacija',
+                'en' => 'Physical medicine and rehabilitation'
+            ],
+                [
+                    'code' => 'PHYSICAL_THERAPY',
+                    'hr' => 'Fizikalna terapija',
+                    'en' => 'Physical therapy',
+                    'parent_id' => 'PHYSICAL_MEDICINE_AND_REHABILITATION'
+                ],
         ];
 
         foreach ($categories as $category) {
-            Category::create([
-                'code' => $category['code'],
-                'en' => $category['en'],
-                'hr' => $category['hr'],
-            ]);
+            if (array_key_exists('parent_id', $category)) {
+                $parent_id = \App\Models\Category::where('code', $category['parent_id'])->value('id');
+
+                Category::create([
+                    'code' => $category['code'],
+                    'en' => $category['en'],
+                    'hr' => $category['hr'],
+                    'parent_id' => $parent_id
+                ]);
+            } else {
+                Category::create([
+                    'code' => $category['code'],
+                    'en' => $category['en'],
+                    'hr' => $category['hr'],
+                ]);
+            }
         }
     }
 }
