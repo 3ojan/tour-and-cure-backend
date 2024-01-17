@@ -193,7 +193,7 @@ class AuthController extends Controller
      * @OA\Get(
      *      path="/api/me",
      *      operationId="getUserProfile",
-     *      tags={"User"},
+     *      tags={"Authentication"},
      *      summary="Get user profile",
      *      description="Get information about the authenticated user",
      *      security={{"bearerAuth": {}}},

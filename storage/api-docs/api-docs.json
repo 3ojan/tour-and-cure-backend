@@ -198,7 +198,7 @@
         "/api/me": {
             "get": {
                 "tags": [
-                    "User"
+                    "Authentication"
                 ],
                 "summary": "Get user profile",
                 "description": "Get information about the authenticated user",
@@ -673,7 +673,12 @@
                             }
                         }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/clinics/{clinic}": {
@@ -735,9 +740,76 @@
                             }
                         }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             },
-            "put": {
+            "delete": {
+                "tags": [
+                    "Clinics"
+                ],
+                "summary": "Delete a Clinic",
+                "description": "Removes the specified clinic.",
+                "operationId": "destroy",
+                "parameters": [
+                    {
+                        "name": "clinic",
+                        "in": "path",
+                        "description": "ID of the clinic",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Clinic deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "Success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Clinic deleted successfully!"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found - Clinic not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Clinic not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "patch": {
                 "tags": [
                     "Clinics"
                 ],
@@ -862,29 +934,39 @@
                             }
                         }
                     }
-                }
-            },
-            "delete": {
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/employees": {
+            "get": {
                 "tags": [
-                    "Clinics"
+                    "Employees"
                 ],
-                "summary": "Delete a Clinic",
-                "description": "Removes the specified clinic.",
-                "operationId": "destroy",
+                "summary": "Get a listing of employees",
+                "description": "Display a listing of the resource.",
+                "operationId": "getEmployeeList",
                 "parameters": [
                     {
-                        "name": "clinic",
-                        "in": "path",
-                        "description": "ID of the clinic",
-                        "required": true,
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
                         "schema": {
-                            "type": "integer"
+                            "type": "integer",
+                            "format": "int32",
+                            "maximum": 100,
+                            "minimum": 1
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Clinic deleted successfully",
+                        "description": "Successful operation",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -895,7 +977,191 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Clinic deleted successfully!"
+                                            "example": "All employees fetched successfully!"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/EmployeeResource"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Employees"
+                ],
+                "summary": "Store a new employee",
+                "description": "Stores a new employee along with clinic user details.",
+                "operationId": "storeEmployee",
+                "requestBody": {
+                    "description": "Employee details",
+                    "required": true,
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password",
+                                    "role",
+                                    "clinic_id"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "john@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "secret123"
+                                    },
+                                    "clinic_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "role": {
+                                        "type": "string",
+                                        "example": "employee_role"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Employee description"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "123456789"
+                                    },
+                                    "type": {
+                                        "type": "string",
+                                        "example": "employee_type"
+                                    },
+                                    "is_public": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "profile_picture": {
+                                        "type": "string",
+                                        "example": "uuid_of_media_file"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Employee created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "Success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Employee created successfully!"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/EmployeeResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity - Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Validation error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "type": "object",
+                                            "example": {
+                                                "email": [
+                                                    "The email field is required."
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/employees/{employee}": {
+            "get": {
+                "tags": [
+                    "Employees"
+                ],
+                "summary": "Get a Specific Employee",
+                "description": "Displays information about a specific employee.",
+                "operationId": "showEmployee",
+                "parameters": [
+                    {
+                        "name": "employee",
+                        "in": "path",
+                        "description": "ID of the employee",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Employee fetched successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "Success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Employee fetched successfully!"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/EmployeeResource"
                                         }
                                     },
                                     "type": "object"
@@ -904,14 +1170,14 @@
                         }
                     },
                     "404": {
-                        "description": "Not Found - Clinic not found",
+                        "description": "Not Found - Employee not found",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "error": {
                                             "type": "string",
-                                            "example": "Clinic not found"
+                                            "example": "Employee not found"
                                         }
                                     },
                                     "type": "object"
@@ -919,7 +1185,194 @@
                             }
                         }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Employees"
+                ],
+                "summary": "Delete an Employee",
+                "description": "Deletes a specific employee and associated media files.",
+                "operationId": "deleteEmployee",
+                "parameters": [
+                    {
+                        "name": "employee",
+                        "in": "path",
+                        "description": "ID of the employee",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Employee successfully deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "Success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Employee successfully deleted!"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found - Employee not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Employee not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Employees"
+                ],
+                "summary": "Update an Employee",
+                "description": "Updates information about a specific employee.",
+                "operationId": "updateEmployee",
+                "parameters": [
+                    {
+                        "name": "employee",
+                        "in": "path",
+                        "description": "ID of the employee",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Employee details",
+                    "required": true,
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "properties": {
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Updated description"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "987654321"
+                                    },
+                                    "type": {
+                                        "type": "string",
+                                        "example": "updated_employee_type"
+                                    },
+                                    "is_public": {
+                                        "type": "boolean",
+                                        "example": false
+                                    },
+                                    "profile_picture": {
+                                        "type": "string",
+                                        "example": "uuid_of_media_file"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Updated John Doe"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "updated_john@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "updated_secret123"
+                                    },
+                                    "role": {
+                                        "type": "string",
+                                        "example": "updated_role"
+                                    },
+                                    "clinic_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Employee successfully updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "Success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Employee successfully updated!"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/EmployeeResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found - Employee not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Employee not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         }
     },
