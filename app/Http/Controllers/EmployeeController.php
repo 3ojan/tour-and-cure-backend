@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Employees;
-use App\Http\Requests\EmployeesUsers;
-use App\Http\Requests\EmployeesUsersClinics;
+use App\Http\Requests\Employees\EmployeeViewAllRequest as ViewAll;
+use App\Http\Requests\Employees\EmployeeViewRequest as View;
+use App\Http\Requests\Employees\EmployeeDeleteRequest as Delete;
+use App\Http\Requests\EmployeesUsers\EmployeeUserStoreRequest as Store;
+use App\Http\Requests\EmployeesUsers\EmployeeUserUpdateRequest as Update;
 use App\Http\Resources\EmployeeResource;
 use App\Models\Employee;
 use App\Models\Media;
-use App\Models\User;
 use App\Traits\HttpResponses;
 
 
@@ -24,7 +25,7 @@ class EmployeeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Employees\EmployeeViewAllRequest $request)
+    public function index(ViewAll $request)
     {
         $perPage = $request->input('per_page', 20);
         $user = auth()->user();
@@ -45,23 +46,20 @@ class EmployeeController extends Controller
     /**
      * Store employee and clinic user at once.
      */
-    public function store(EmployeesUsersClinics\EmployeeUserClinicStoreRequest $request)
+    public function store(Store $request)
     {
-        if($request->has('clinic_id')) {
-            $user = app(UserController::class)->storeClinicUser($request);
-        } else {
-            $user = app(UserController::class)->storeClinicOwner($request);
-        }
+        $user = app(UserController::class)->storeClinicUser($request);
 
         $employee = Employee::create([
             'user_id' => $user->id,
-            'description' => $request->employee_description ?? null,
-            'phone' => $request->employee_phone ?? null,
-            'type' => $request->employee->type ?? null
+            'description' => $request->description,
+            'phone' => $request->phone,
+            'type' => $request->type,
+            'is_public' => $request->is_public
         ]);
 
-        if ($request->has('employee_picture')) {
-            $uuid = $request->employee_picture;
+        if ($request->has('profile_picture')) {
+            $uuid = $request->profile_picture;
 
             $media = Media::where('id', $uuid)->first();
 
@@ -78,7 +76,7 @@ class EmployeeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Employees\EmployeeViewRequest $request, Employee $employee)
+    public function show(View $request, Employee $employee)
     {
         return $this->success(new EmployeeResource($employee), 'Employee fetched successfully!');
     }
@@ -86,7 +84,7 @@ class EmployeeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(EmployeesUsers\EmployeeUserUpdateRequest $request, Employee $employee)
+    public function update(Update $request, Employee $employee)
     {
         //If user data are present call user update method
         if ($request->hasAny(['name', 'email', 'password', 'role'])) {
@@ -95,10 +93,21 @@ class EmployeeController extends Controller
 
         //Update employee data
         $employee->update([
-            'description' => $request->employee_description,
-            'phone' => $request->employee_phone,
-            'type' => $request->employee_type,
+            'description' => $request->description,
+            'phone' => $request->phone,
+            'type' => $request->type,
+            'is_public' => $request->is_public
         ]);
+
+        if ($request->has('profile_picture')) {
+            $uuid = $request->profile_picture;
+
+            $media = Media::where('id', $uuid)->first();
+
+            if ($media) {
+                $employee->media()->save($media);
+            }
+        }
 
         $employee->refresh();
 
@@ -109,7 +118,7 @@ class EmployeeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Employees\EmployeeDeleteRequest $request, Employee $employee)
+    public function destroy(Delete $request, Employee $employee)
     {
         // delete media related to this employee, in public folder and media_files table
         if ($employee->media) {

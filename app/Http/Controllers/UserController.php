@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\EmployeesUsersClinics;
-use App\Http\Requests\EmployeesUsers;
-use App\Http\Requests\Users;
-use App\Http\Requests\Users\UserViewAllRequest;
+use App\Http\Requests\Users\UserViewAllRequest as ViewAll;
+use App\Http\Requests\EmployeesUsers\EmployeeUserStoreRequest as Store;
+use App\Http\Requests\Users\UserViewRequest as View;
+use App\Http\Requests\EmployeesUsers\EmployeeUserUpdateRequest as Update;
+use App\Http\Requests\Users\UserDeleteRequest as Delete;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Traits\HttpResponses;
@@ -24,10 +25,11 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param UserViewAllRequest $request
+     * @param ViewAll $request
+     *
      * @return JsonResponse
      */
-    public function index(Users\UserViewAllRequest $request)
+    public function index(ViewAll $request)
     {
         $perPage = $request->input('per_page', 20);
 
@@ -40,37 +42,13 @@ class UserController extends Controller
     }
 
     /**
-     * Store clinic_owner and clinic and return $user to EmployeeController.
-     *
-     * @param EmployeesUsersClinics\EmployeeUserClinicStoreRequest $request
-     *
-     * @return JsonResponse
-     */
-    public function storeClinicOwner(EmployeesUsersClinics\EmployeeUserClinicStoreRequest $request)
-    {
-        $clinic = app(ClinicController::class)->store($request);
-
-        $clinicOwner = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => 'clinic_owner',
-            'clinic_id' => $clinic->id
-        ]);
-
-        $clinicOwner->refresh();
-
-        return $clinicOwner;
-    }
-
-    /**
      * Store clinic_user and return $user to EmployeeController.
      *
-     * @param EmployeesUsersClinics\EmployeeUserClinicStoreRequest $request
+     * @param Store $request
      *
      * @return JsonResponse
      */
-    public function storeClinicUser(EmployeesUsersClinics\EmployeeUserClinicStoreRequest $request)
+    public function storeClinicUser(Store $request)
     {
         $clinicUser = User::create([
             'name' => $request->name,
@@ -87,16 +65,26 @@ class UserController extends Controller
 
     /**
      * Display the specified resource.
+     *
+     * @param View $request
+     * @param User $user
+     *
+     * @return JsonResponse
      */
-    public function show(Users\UserViewRequest $request, User $user)
+    public function show(View $request, User $user)
     {
         return $this->success(new UserResource($user), 'User fetched successfully!');
     }
 
     /**
      * Update the specified resource in storage.
+     *
+     * @param Update $request
+     * @param User $user
+     *
+     * @return JsonResponse
      */
-    public function update(EmployeesUsers\EmployeeUserUpdateRequest $request, User $user)
+    public function update(Update $request, User $user)
     {
         $user->update($request->validated());
 
@@ -105,15 +93,19 @@ class UserController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     *
+     * @param Delete $request
+     * @param User $user
+     *
+     * @return JsonResponse
      */
-    public function destroy(Users\UserDeleteRequest $request, User $user)
+    public function destroy(Delete $request, User $user)
     {
         // delete media related to this user, in public folder and media_files table
         if ($user->employee->media) {
             app(MediaController::class)->destroy($user->employee);
         }
 
-        //delete user
         $user->delete();
 
         return $this->success('', 'User successfully deleted!');
