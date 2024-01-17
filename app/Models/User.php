@@ -42,15 +42,6 @@ class User extends Authenticatable implements JWTSubject
     ];
 
     /**
-     * The attributes that should be visible in arrays.
-     *
-     * @var array
-     */
-    protected $visible = [
-        // 'user_role'
-    ];
-
-    /**
      * The accessors to append to the model's array form.
      *
      * @var array

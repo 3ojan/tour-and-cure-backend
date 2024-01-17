@@ -63,7 +63,7 @@ class MediaController extends Controller
     /**
      * Update file information on Media_types table associated with specific employee.
      *
-     * @param EmployeesUsersClinics\EmployeeUserClinicStoreRequest $request
+     * @param Request $request
      * @param Model $model
      * @return JsonResponse
      */

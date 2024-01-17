@@ -15,20 +15,16 @@ class EmployeeUserUpdateRequest extends FormRequest
     {
         $user = Auth::user();
 
-        if ($user->role === 'admin') {
+        if ($user->isAdmin()) {
             return true;
-        } elseif ($user->role === 'clinic_owner' and $this->route('employee')) {
+        } elseif ($user->isClinicOwner() and $this->route('employee')) {
             $employee = $this->route('employee');
-            if ($employee->user->clinic_id === $user->clinic_id) {
-                return true;
-            }
-            return false;
-        } elseif ($user->role === 'clinic_user' and $this->route('employee')) {
+
+            return $employee->user->clinic_id === $user->clinic_id;
+        } elseif ($user->isClinicUser() and $this->route('employee')) {
             $employee = $this->route('employee');
-            if ($employee->id === $user->employee->id) {
-                return true;
-            }
-            return false;
+
+            return $employee->id === $user->employee->id;
         }
         return false;
     }
@@ -55,8 +51,7 @@ class EmployeeUserUpdateRequest extends FormRequest
                 'sometimes',
                 Rule::unique('users')->ignore($this->user->id)
             ],
-            'password' => 'sometimes|required_with:password_confirmation|min:8|string|confirmed',
-            'password_confirmation' => 'required_with:password|same:password|string',
+            'password' => 'sometimes|min:8|string|confirmed',
         ];
     }
 
@@ -68,12 +63,14 @@ class EmployeeUserUpdateRequest extends FormRequest
                 'sometimes',
                 Rule::unique('users')->ignore($this->employee->user->id)
             ],
-            'password' => 'sometimes|required_with:password_confirmation|min:8|string|confirmed',
-            'password_confirmation' => 'required_with:password|same:password|string',
+            'password' => 'sometimes|min:8|string|confirmed',
 
-            'employee_description' => 'sometimes|string|max:255',
-            'employee_phone' => 'sometimes|string',
-            'employee_type' => 'sometimes|string|max:255',
+            'description' => 'sometimes|string|max:255',
+            'phone' => 'sometimes|string',
+            'type' => 'sometimes|string|max:255',
+            'is_public' => 'sometimes|boolean',
+
+            'profile_picture' => 'sometimes|exists:media_files,id',
         ];
     }
 }
