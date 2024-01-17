@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use App\Models\PasswordReset;
 use App\Models\User;
 use App\Notifications\PasswordResetNotification;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
+
 class AuthController extends Controller
 {
 
@@ -23,6 +25,7 @@ class AuthController extends Controller
         $this->middleware('auth:api', [
             'except' => [
                 'login',
+                'refresh',
                 'register',
                 'forgotPassword',
                 'resetPassword',
@@ -33,11 +36,52 @@ class AuthController extends Controller
     }
 
     /**
-     * Get a JWT token via given credentials.
+     * * Get a JWT token via given credentials.
      *
      * @param Request $request
      *
      * @return JsonResponse
+     *
+     * @OA\Post(
+     *      path="/api/login",
+     *      operationId="loginUser",
+     *      tags={"Authentication"},
+     *      summary="User login",
+     *      description="Logs in a user with email and password",
+     *      @OA\RequestBody(
+     *          required=true,
+     *          description="User credentials",
+     *          @OA\MediaType(
+     *              mediaType="application/x-www-form-urlencoded",
+     *              @OA\Schema(
+     *                  @OA\Property(property="email", type="string", format="email", example="john@example.com"),
+     *                  @OA\Property(property="password", type="string", format="password", example="secret123"),
+     *              )
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="User successfully logged in",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="status", type="string", example="success"),
+     *              @OA\Property(property="user", type="object"),
+     *              @OA\Property(
+     *                  property="authorisation",
+     *                  type="object",
+     *                  @OA\Property(property="access_token", type="string", example="your_access_token"),
+     *                  @OA\Property(property="token_type", type="string", example="bearer"),
+     *                  @OA\Property(property="expires_in", type="integer", example=3600),
+     *              ),
+     *          ),
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthorized - Invalid credentials",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="error", type="string", example="Invalid credentials"),
+     *          ),
+     *      ),
+     * )
      */
     public function login(Request $request)
     {
@@ -52,11 +96,11 @@ class AuthController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        $user = User::where('email', $request->email)->first();
+        $user = Auth::user();
 
         return response()->json([
             'status' => 'success',
-            'user' => $user,
+            'user' => new UserResource($user),
             'authorisation' => [
                 'access_token' => $token,
                 'token_type' => 'bearer',
@@ -67,9 +111,55 @@ class AuthController extends Controller
 
 
     /**
-     * Register and authenticate new User
+     * Register a new user.
+     *
+     * @param Authentications\AuthenticationRegisterNewUserRequest $request
      *
      * @return JsonResponse
+     *
+     * @OA\Post(
+     *      path="/api/register",
+     *      operationId="registerUser",
+     *      tags={"Authentication"},
+     *      summary="Register a new user",
+     *      description="Registers a new user with the provided information",
+     *     @OA\RequestBody(
+     *          required=true,
+     *          description="User registration details",
+     *          @OA\MediaType(
+     *              mediaType="application/x-www-form-urlencoded",
+     *              @OA\Schema(
+     *                  @OA\Property(property="name", type="string", example="John Doe"),
+     *                  @OA\Property(property="email", type="string", format="email", example="john@example.com"),
+     *                  @OA\Property(property="password", type="string", format="password", example="secret123"),
+     *              )
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="User successfully registered",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="status", type="string", example="success"),
+     *              @OA\Property(property="user", type="object"),
+     *              @OA\Property(
+     *                  property="authorisation",
+     *                  type="object",
+     *                  @OA\Property(property="access_token", type="string", example="your_access_token"),
+     *                  @OA\Property(property="token_type", type="string", example="bearer"),
+     *                  @OA\Property(property="expires_in", type="integer", example=3600),
+     *              ),
+     *          ),
+     *      ),
+     *      @OA\Response(
+     *          response=422,
+     *          description="Unprocessable Entity - Validation error",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="error", type="string", example="Validation error"),
+     *              @OA\Property(property="message", type="string", example="The given data was invalid."),
+     *              @OA\Property(property="errors", type="object", example={"email": {"The email field is required."}}),
+     *          ),
+     *      ),
+     * )
      */
     public function register(Authentications\AuthenticationRegisterNewUserRequest $request)
     {
@@ -96,19 +186,66 @@ class AuthController extends Controller
     }
 
     /**
-     * Get the authenticated User
+     * Get the authenticated user information.
      *
      * @return JsonResponse
+     *
+     * @OA\Get(
+     *      path="/api/me",
+     *      operationId="getUserProfile",
+     *      tags={"User"},
+     *      summary="Get user profile",
+     *      description="Get information about the authenticated user",
+     *      security={{"bearerAuth": {}}},
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="user", type="object"),
+     *          ),
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthorized - Invalid or missing token",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="error", type="string", example="Unauthorized"),
+     *          ),
+     *      ),
+     * )
      */
+
     public function me()
     {
         return response()->json($this->guard()->user());
     }
 
     /**
-     * Log the user out (Invalidate the token)
+     * Logout the authenticated user.
      *
      * @return JsonResponse
+     *
+     * @OA\Post(
+     *      path="/api/logout",
+     *      operationId="logoutUser",
+     *      tags={"Authentication"},
+     *      summary="Logout user",
+     *      description="Logs out the authenticated user",
+     *      security={{"bearerAuth": {}}},
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successfully logged out",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", example="Successfully logged out"),
+     *          ),
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthorized - Invalid or missing token",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="error", type="string", example="Unauthorized"),
+     *          ),
+     *      ),
+     * )
      */
     public function logout()
     {
@@ -118,9 +255,40 @@ class AuthController extends Controller
     }
 
     /**
-     * Refresh a token.
+     * Refresh the user's JWT token.
      *
      * @return JsonResponse
+     *
+     * @OA\Post(
+     *      path="/api/refresh",
+     *      operationId="refreshToken",
+     *      tags={"Authentication"},
+     *      summary="Refresh User Token",
+     *      description="Refreshes the user's JWT token",
+     *      security={{"bearerAuth":{}}},
+     *      @OA\Response(
+     *          response=200,
+     *          description="Token successfully refreshed",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="status", type="string", example="success"),
+     *              @OA\Property(property="user", type="object"),
+     *              @OA\Property(
+     *                  property="authorisation",
+     *                  type="object",
+     *                  @OA\Property(property="access_token", type="string", example="your_refreshed_access_token"),
+     *                  @OA\Property(property="token_type", type="string", example="bearer"),
+     *                  @OA\Property(property="expires_in", type="integer", example=3600),
+     *              ),
+     *          ),
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthorized - Token refresh failed",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="error", type="string", example="Token refresh failed"),
+     *          ),
+     *      ),
+     * )
      */
     public function refresh()
     {
@@ -128,11 +296,43 @@ class AuthController extends Controller
     }
 
     /**
-     * Creates token for password reset and sends password reset email.
+     * Initiate the forgot password process.
      *
      * @param Authentications\AuthenticationForgotPasswordRequest $request
      * @return JsonResponse
-     * @throws Exception
+     *
+     * @OA\Post(
+     *      path="/api/password/forgot",
+     *      operationId="forgotPassword",
+     *      tags={"Authentication"},
+     *      summary="Forgot Password",
+     *      description="Initiates the forgot password process and sends a reset link to the user's email address.",
+     *      @OA\RequestBody(
+     *          required=true,
+     *          description="User email",
+     *          @OA\MediaType(
+     *              mediaType="application/x-www-form-urlencoded",
+     *              @OA\Schema(
+     *                  @OA\Property(property="email", type="string", format="email", example="john@example.com"),
+     *              )
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Reset link sent successfully",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="status", type="string", example="success"),
+     *              @OA\Property(property="message", type="string", example="A reset link has been sent to your email address."),
+     *          ),
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Not Found - User with provided email not found",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="error", type="string", example="User not found"),
+     *          ),
+     *      ),
+     * )
      */
     public function forgotPassword(Authentications\AuthenticationForgotPasswordRequest $request)
     {
@@ -169,10 +369,51 @@ class AuthController extends Controller
     }
 
     /**
-     * Resets password using token sent by forgotPassword method.
+     * Reset user's password based on the provided token.
      *
      * @param Authentications\AuthenticationResetPasswordRequest $request
      * @return JsonResponse
+     *
+     * @OA\Post(
+     *      path="/api/reset-password",
+     *      operationId="resetPassword",
+     *      tags={"Authentication"},
+     *      summary="Reset Password",
+     *      description="Resets user's password based on the provided token.",
+     *      @OA\RequestBody(
+     *          required=true,
+     *          description="Reset password details",
+     *          @OA\MediaType(
+     *              mediaType="application/x-www-form-urlencoded",
+     *              @OA\Schema(
+     *                  @OA\Property(property="token", type="string", example="reset_token_here"),
+     *                  @OA\Property(property="password", type="string", format="password", example="new_password"),
+     *              )
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Password reset successful",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="status", type="string", example="success"),
+     *              @OA\Property(property="user", type="object"),
+     *              @OA\Property(
+     *                  property="authorisation",
+     *                  type="object",
+     *                  @OA\Property(property="access_token", type="string", example="new_access_token"),
+     *                  @OA\Property(property="token_type", type="string", example="bearer"),
+     *                  @OA\Property(property="expires_in", type="integer", example=3600),
+     *              ),
+     *          ),
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthorized - Incorrect token, please try again",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="error", type="string", example="Incorrect token, please try again"),
+     *          ),
+     *      ),
+     * )
      */
     public function resetPassword(Authentications\AuthenticationResetPasswordRequest $request)
     {
@@ -225,12 +466,13 @@ class AuthController extends Controller
     }
 
     /**
-     * Redirect the user to the Provider authentication page.
+     * * Redirect the user to the Provider authentication page.
      *
      * @param $provider
+     *
      * @return JsonResponse
+     *
      */
-
     public function redirectToProvider($provider)
     {
         return Socialite::driver($provider)->stateless()->redirect();
@@ -241,7 +483,9 @@ class AuthController extends Controller
      * Social login response and register/login logic.
      *
      * @param $provider
+     *
      * @return JsonResponse
+     *
      */
     public function handleProviderCallback($provider)
     {
