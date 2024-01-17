@@ -512,9 +512,728 @@
                     }
                 }
             }
+        },
+        "/api/clinics": {
+            "get": {
+                "tags": [
+                    "Clinics"
+                ],
+                "summary": "Get All Clinics",
+                "description": "Displays a listing of all clinics.",
+                "operationId": "index",
+                "parameters": [
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "schema": {
+                            "type": "integer",
+                            "default": 20
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "All clinics fetched successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "Success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "All clinics fetched successfully!"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/ClinicResource"
+                                            }
+                                        },
+                                        "links": {
+                                            "properties": {
+                                                "pagination": {
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Clinics"
+                ],
+                "summary": "Create a Clinic",
+                "description": "Stores a newly created clinic.",
+                "operationId": "store",
+                "requestBody": {
+                    "description": "Clinic details",
+                    "required": true,
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "city",
+                                    "country_id",
+                                    "category_ids"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Clinic Name"
+                                    },
+                                    "address": {
+                                        "type": "string",
+                                        "example": "Clinic Address"
+                                    },
+                                    "postcode": {
+                                        "type": "string",
+                                        "example": "12345"
+                                    },
+                                    "city": {
+                                        "type": "string",
+                                        "example": "Clinic City"
+                                    },
+                                    "latitude": {
+                                        "type": "string",
+                                        "example": "Clinic Latitude"
+                                    },
+                                    "longitude": {
+                                        "type": "string",
+                                        "example": "Clinic Longitude"
+                                    },
+                                    "country_id": {
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "category_ids": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Clinic created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "Success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Clinic created successfully!"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/ClinicResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity - Validation errors",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Validation failed"
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/clinics/{clinic}": {
+            "get": {
+                "tags": [
+                    "Clinics"
+                ],
+                "summary": "Get a Specific Clinic",
+                "description": "Displays information about a specific clinic.",
+                "operationId": "show",
+                "parameters": [
+                    {
+                        "name": "clinic",
+                        "in": "path",
+                        "description": "ID of the clinic",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Clinic fetched successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "Success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Clinic fetched successfully!"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/ClinicResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found - Clinic not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Clinic not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Clinics"
+                ],
+                "summary": "Update a Clinic",
+                "description": "Updates the specified clinic.",
+                "operationId": "update",
+                "parameters": [
+                    {
+                        "name": "clinic",
+                        "in": "path",
+                        "description": "ID of the clinic",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Updated clinic details",
+                    "required": true,
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Updated Clinic Name"
+                                    },
+                                    "address": {
+                                        "type": "string",
+                                        "example": "Updated Clinic Address"
+                                    },
+                                    "postcode": {
+                                        "type": "string",
+                                        "example": "54321"
+                                    },
+                                    "city": {
+                                        "type": "string",
+                                        "example": "Updated Clinic City"
+                                    },
+                                    "latitude": {
+                                        "type": "string",
+                                        "example": "Updated Clinic Latitude"
+                                    },
+                                    "longitude": {
+                                        "type": "string",
+                                        "example": "Updated Clinic Longitude"
+                                    },
+                                    "country_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "category_ids": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Clinic updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "Success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Clinic updated successfully!"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/ClinicResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found - Clinic not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Clinic not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity - Validation errors",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Validation failed"
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Clinics"
+                ],
+                "summary": "Delete a Clinic",
+                "description": "Removes the specified clinic.",
+                "operationId": "destroy",
+                "parameters": [
+                    {
+                        "name": "clinic",
+                        "in": "path",
+                        "description": "ID of the clinic",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Clinic deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "Success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Clinic deleted successfully!"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found - Clinic not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Clinic not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
+        "schemas": {
+            "CategoryResource": {
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "code": {
+                        "type": "string"
+                    },
+                    "en": {
+                        "type": "string"
+                    },
+                    "hr": {
+                        "type": "string"
+                    },
+                    "subcategories": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/CategoryResource"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "ClinicResource": {
+                "title": "Clinic Resource",
+                "description": "Represents a clinic in the system.",
+                "properties": {
+                    "id": {
+                        "description": "The unique identifier of the clinic.",
+                        "type": "string"
+                    },
+                    "name": {
+                        "description": "The name of the clinic.",
+                        "type": "string"
+                    },
+                    "description": {
+                        "description": "The description of the clinic.",
+                        "type": "string"
+                    },
+                    "address": {
+                        "description": "The address of the clinic.",
+                        "type": "string"
+                    },
+                    "postcode": {
+                        "description": "The postcode of the clinic.",
+                        "type": "string"
+                    },
+                    "city": {
+                        "description": "The city where the clinic is located.",
+                        "type": "string"
+                    },
+                    "country_name": {
+                        "description": "The name of the country where the clinic is located.",
+                        "type": "string"
+                    },
+                    "phone": {
+                        "description": "The phone number of the clinic.",
+                        "type": "string"
+                    },
+                    "mobile": {
+                        "description": "The mobile phone number of the clinic.",
+                        "type": "string"
+                    },
+                    "email": {
+                        "description": "The email address of the clinic.",
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "web": {
+                        "description": "The website of the clinic.",
+                        "type": "string"
+                    },
+                    "contact_person": {
+                        "description": "The contact person of the clinic.",
+                        "type": "string"
+                    },
+                    "contact_phone": {
+                        "description": "The contact phone number of the clinic.",
+                        "type": "string"
+                    },
+                    "contact_email": {
+                        "description": "The contact email address of the clinic.",
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "latitude": {
+                        "description": "The latitude of the clinic location.",
+                        "type": "string"
+                    },
+                    "longitude": {
+                        "description": "The longitude of the clinic location.",
+                        "type": "string"
+                    },
+                    "created_by": {
+                        "$ref": "#/components/schemas/UserResource"
+                    },
+                    "updated_by": {
+                        "$ref": "#/components/schemas/UserResource"
+                    },
+                    "logo_image": {
+                        "description": "The path to the logo image of the clinic.",
+                        "type": "string"
+                    },
+                    "categories": {
+                        "description": "The categories associated with the clinic.",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/CategoryResource"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "ContactResource": {
+                "title": "Contact Resource",
+                "description": "Represents a contact in the system.",
+                "properties": {
+                    "id": {
+                        "description": "The unique identifier of the contact.",
+                        "type": "string"
+                    },
+                    "name": {
+                        "description": "The name of the contact.",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "EmployeeResource": {
+                "title": "Employee Resource",
+                "description": "Represents an employee in the system.",
+                "properties": {
+                    "id": {
+                        "description": "The unique identifier of the employee.",
+                        "type": "string"
+                    },
+                    "name": {
+                        "description": "The name of the employee.",
+                        "type": "string"
+                    },
+                    "email": {
+                        "description": "The email address of the employee.",
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "clinic": {
+                        "$ref": "#/components/schemas/ClinicResource"
+                    },
+                    "role": {
+                        "description": "The role of the employee.",
+                        "type": "string"
+                    },
+                    "permissions": {
+                        "description": "The permissions assigned to the employee.",
+                        "type": "string"
+                    },
+                    "description": {
+                        "description": "The description of the employee.",
+                        "type": "string"
+                    },
+                    "phone": {
+                        "description": "The phone number of the employee.",
+                        "type": "string"
+                    },
+                    "type": {
+                        "description": "The type of the employee.",
+                        "type": "string"
+                    },
+                    "picture": {
+                        "description": "The path to the picture of the employee.",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "EventResource": {
+                "title": "Event Resource",
+                "description": "Represents an event in the system.",
+                "properties": {
+                    "id": {
+                        "description": "The unique identifier of the event.",
+                        "type": "string"
+                    },
+                    "start_time": {
+                        "description": "The start time of the event.",
+                        "type": "string"
+                    },
+                    "end_time": {
+                        "description": "The end time of the event.",
+                        "type": "string"
+                    },
+                    "title": {
+                        "description": "The title of the event.",
+                        "type": "string"
+                    },
+                    "location": {
+                        "description": "The location of the event.",
+                        "type": "string"
+                    },
+                    "data": {
+                        "description": "Additional data related to the event.",
+                        "type": "string"
+                    },
+                    "employees": {
+                        "description": "List of employees associated with the event.",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/EmployeeResource"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "InquiryResource": {
+                "title": "Inquiry Resource",
+                "description": "Represents an inquiry in the system.",
+                "properties": {
+                    "id": {
+                        "description": "The unique identifier of the inquiry.",
+                        "type": "string"
+                    },
+                    "user": {
+                        "$ref": "#/components/schemas/UserResource"
+                    },
+                    "category": {
+                        "$ref": "#/components/schemas/CategoryResource"
+                    },
+                    "form_json": {
+                        "description": "JSON representation of the inquiry form.",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "MessageResourceCollection": {
+                "title": "Message Resource Collection",
+                "description": "Represents a collection of messages for a contact.",
+                "properties": {
+                    "contact_id": {
+                        "description": "The unique identifier of the contact.",
+                        "type": "integer"
+                    },
+                    "contact_name": {
+                        "description": "The name of the contact.",
+                        "type": "string"
+                    },
+                    "messages": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "id": {
+                                    "description": "The unique identifier of the message.",
+                                    "type": "integer"
+                                },
+                                "message": {
+                                    "description": "The content of the message.",
+                                    "type": "string"
+                                },
+                                "timestamp": {
+                                    "description": "The timestamp when the message was created.",
+                                    "type": "string",
+                                    "format": "date-time"
+                                },
+                                "incoming": {
+                                    "description": "Indicates whether the message is incoming or outgoing.",
+                                    "type": "boolean"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "UserResource": {
+                "title": "User Resource",
+                "description": "Represents a user.",
+                "properties": {
+                    "id": {
+                        "description": "The unique identifier of the user.",
+                        "type": "integer"
+                    },
+                    "name": {
+                        "description": "The name of the user.",
+                        "type": "string"
+                    },
+                    "email": {
+                        "description": "The email address of the user.",
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "clinic": {
+                        "$ref": "#/components/schemas/ClinicResource"
+                    },
+                    "role": {
+                        "description": "The role of the user.",
+                        "type": "string"
+                    },
+                    "permissions": {
+                        "description": "The permissions assigned to the user.",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "type": "object"
+            }
+        },
         "securitySchemes": {
             "bearerAuth": {
                 "type": "http",
