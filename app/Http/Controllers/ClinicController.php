@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ClinicResource;
 use App\Models\Clinic;
-use App\Http\Requests\Clinics;
-use App\Http\Requests\EmployeesUsersClinics;
+use App\Http\Requests\Clinics\ClinicViewAllRequest as ViewAll;
+use App\Http\Requests\Clinics\ClinicViewRequest as View;
+use App\Http\Requests\Clinics\ClinicStoreRequest as Store;
+use App\Http\Requests\Clinics\ClinicUpdateRequest as Update;
+use App\Http\Requests\Clinics\ClinicDeleteRequest as Delete;
 use App\Traits\HttpResponses;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -27,11 +30,11 @@ class ClinicController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param Clinics\ClinicViewAllRequest $request
+     * @param ViewAll $request
      *
      * @return JsonResponse
      */
-    public function index(Clinics\ClinicViewAllRequest $request)
+    public function index(ViewAll $request)
     {
         $perPage = $request->input('per_page', 20);
 
@@ -46,12 +49,12 @@ class ClinicController extends Controller
     /**
      * Display a specified resource.
      *
-     * @param Clinics\ClinicViewRequest $request
+     * @param View $request
      * @param Clinic $clinic
      *
      * @return JsonResponse
      */
-    public function show(Clinics\ClinicViewRequest $request, Clinic $clinic)
+    public function show(View $request, Clinic $clinic)
     {
         return $this->success(new ClinicResource($clinic), 'Clinic fetched successfully!');
     }
@@ -59,18 +62,20 @@ class ClinicController extends Controller
     /**
      * Store a newly created clinic resource and return $clinic to UserController.
      *
-     * @param EmployeesUsersClinics\EmployeeUserClinicStoreRequest $request
+     * @param Store $request
      *
      * @return JsonResponse
      */
-    public function store(EmployeesUsersClinics\EmployeeUserClinicStoreRequest $request)
+    public function store(Store $request)
     {
         $clinic = Clinic::create([
-            'name' => $request->clinic_name,
-            'address' => $request->clinic_address,
-            'postcode' => $request->clinic_postcode,
-            'city' => $request->clinic_city,
-            'country_id' => $request->clinic_country_id,
+            'name' => $request->name,
+            'address' => $request->address,
+            'postcode' => $request->postcode,
+            'city' => $request->city,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
+            'country_id' => $request->country_id,
             'created_by' => Auth::user()->id
         ]);
 
@@ -78,18 +83,18 @@ class ClinicController extends Controller
 
         $clinic->refresh();
 
-        return $clinic;
+        return $this->success(new ClinicResource($clinic), 'Clinic created successfully!');
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param Clinics\ClinicUpdateRequest $request
+     * @param Update $request
      * @param Clinic $clinic
      *
      * @return JsonResponse
      */
-    public function update(Clinics\ClinicUpdateRequest $request, Clinic $clinic)
+    public function update(Update $request, Clinic $clinic)
     {
         $validatedData = $request->validated();
         $validatedData['updated_by'] = Auth::user()->id;
@@ -106,14 +111,14 @@ class ClinicController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param Clinics\ClinicDeleteRequest $request
+     * @param Delete $request
      * @param Clinic $clinic
      *
      * @return JsonResponse
      */
-    public function destroy(Clinics\ClinicDeleteRequest $request, Clinic $clinic)
+    public function destroy(Delete $request, Clinic $clinic)
     {
-        // delete media related to this user, in public folder and media_files table
+        // delete media related to this clinic, in public folder and media_files table
         if ($clinic->media) {
             app(MediaController::class)->destroy($clinic);
         }
