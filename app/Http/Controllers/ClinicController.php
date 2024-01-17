@@ -108,6 +108,9 @@ class ClinicController extends Controller
      *              @OA\Property(property="error", type="string", example="Clinic not found"),
      *          ),
      *      ),
+     *     security={
+     *         {"bearerAuth": {}}
+     *     }
      * )
      */
     public function show(View $request, Clinic $clinic)
@@ -162,6 +165,9 @@ class ClinicController extends Controller
      *              @OA\Property(property="errors", type="object"),
      *          ),
      *      ),
+     *     security={
+     *         {"bearerAuth": {}}
+     *     }
      * )
      */
     public function store(Store $request)
@@ -191,7 +197,7 @@ class ClinicController extends Controller
      * @param Clinic $clinic
      * @return JsonResponse
      *
-     * @OA\Put(
+     * @OA\Patch(
      *      path="/api/clinics/{clinic}",
      *      operationId="update",
      *      tags={"Clinics"},
@@ -245,6 +251,9 @@ class ClinicController extends Controller
      *              @OA\Property(property="errors", type="object"),
      *          ),
      *      ),
+     *     security={
+     *         {"bearerAuth": {}}
+     *     }
      * )
      */
     public function update(Update $request, Clinic $clinic)
@@ -296,6 +305,9 @@ class ClinicController extends Controller
      *              @OA\Property(property="error", type="string", example="Clinic not found"),
      *          ),
      *      ),
+     *     security={
+     *         {"bearerAuth": {}}
+     *     }
      * )
      */
     public function destroy(Delete $request, Clinic $clinic)
