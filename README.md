@@ -15,6 +15,7 @@
 - reset baze: `sail artisan migrate:fresh --seed`
 - prikaži sve rute: `sail artisan r:l`
 - gašenje kontejnera: `sail down`
+- config clear: `sail artisan config:clear`
 
 ## Produkcija - social login
 -naprviti OAuth račune na Googlu i Facebooku te upisati podatke u .env
