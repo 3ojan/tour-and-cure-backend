@@ -28,7 +28,6 @@ return [
             'api' => [
                     'driver' => 'jwt',
                     'provider' => 'users',
-                    'expire_in' => env('TOKEN_TTL_SECONDS', 3600),
             ],
 
         ],
