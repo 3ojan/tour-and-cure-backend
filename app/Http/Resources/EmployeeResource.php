@@ -19,6 +19,7 @@ class EmployeeResource extends JsonResource
             'name' => $this->user->name,
             'email' => $this->user->email,
             'clinic' => new ClinicResource($this->whenLoaded('clinic')),
+            'role' => $this->user->role,
             'permissions' => $this->user->permissions,
             'description' => $this->description,
             'phone' => $this->phone,
