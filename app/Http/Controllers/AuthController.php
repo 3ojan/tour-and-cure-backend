@@ -24,6 +24,7 @@ class AuthController extends Controller
             'except' => [
                 'login',
                 'register',
+                'refresh',
                 'forgotPassword',
                 'resetPassword',
                 'social/*',
