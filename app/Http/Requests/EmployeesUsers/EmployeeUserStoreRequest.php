@@ -39,7 +39,7 @@ class EmployeeUserStoreRequest extends FormRequest
                 'required',
                 Rule::in(['clinic_owner', 'clinic_user'])
             ],
-            'clinic_id' => 'required|string|exists:clinics,id',
+            'clinic_id' => 'sometimes|string|exists:clinics,id',
 
             'description' => 'sometimes|string|max:255',
             'phone' => 'sometimes|string',

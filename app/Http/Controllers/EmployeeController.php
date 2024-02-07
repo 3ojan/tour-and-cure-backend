@@ -27,15 +27,48 @@ class EmployeeController extends Controller
      */
     public function index(ViewAll $request)
     {
+        $search = $request->query('search');
         $perPage = $request->input('per_page', 20);
+
         $user = auth()->user();
 
-        $employees = Employee::when($user->role === 'clinic_owner', function ($query) use ($user) {
-            return $query->whereHas('user', function ($subquery) use ($user) {
-                $subquery->where('clinic_id', $user->clinic_id);
+        $employees = Employee::query();
+
+        if ($user->isAdmin()) {
+            if ($search) {
+                $employees->where('phone', 'like', "%{$search}%")
+                    ->orWhere('phone', 'like', "%{$search}%");
+
+                $employees->orWhereHas('user', function($query) use ($search) {
+                    $query->where('name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
+
+                    $query->orWhereHas('clinic', function($subquery) use ($search) {
+                        $subquery->where('name', 'like', "%{$search}%");
+                    });
+                });
+            }
+        } else {
+            $clinicId = $user->clinic_id;
+
+            $employees->whereHas('user.clinic', function ($query) use ($clinicId) {
+                $query->where('id', $clinicId);
             });
-        })
-            ->paginate($perPage);
+
+            if ($search) {
+                $employees->where('name', 'like', "%{$search}%")
+                    ->orWhere('phone', 'like', "%{$search}%")
+                    ->orWhere('type', 'like', "%{$search}%");
+
+                $employees->orWhereHas('user', function($query) use ($search, $clinicId) {
+                    $query->where('name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%")
+                        ->where('clinic_id', $clinicId);
+                });
+            }
+        }
+
+        $employees = $employees->paginate($perPage);
 
         return response()->json(array_merge([
             'status' => 'Success',

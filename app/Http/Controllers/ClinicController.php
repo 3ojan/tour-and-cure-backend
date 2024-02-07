@@ -36,9 +36,29 @@ class ClinicController extends Controller
      */
     public function index(ViewAll $request)
     {
+        $search = $request->query('search');
         $perPage = $request->input('per_page', 20);
 
-        $clinics = Clinic::paginate($perPage);
+        $clinics = Clinic::query();
+
+        if ($search) {
+            $clinics->orWhere('name', 'like', "%{$search}%")
+                ->orWhere('description', 'like', "%{$search}%")
+                ->orWhere('address', 'like', "%{$search}%")
+                ->orWhere('postcode', 'like', "%{$search}%")
+                ->orWhere('city', 'like', "%{$search}%");
+
+            $clinics->orWhereHas('country', function($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%");
+            });
+
+            $clinics->orWhereHas('categories', function($query) use ($search) {
+                $query->where('en', 'like', "%{$search}%")
+                    ->orWhere('hr', 'like', "%{$search}%");
+            });
+        }
+
+        $clinics = $clinics->simplePaginate($perPage);
 
         return response()->json(array_merge([
             'status' => 'Success',

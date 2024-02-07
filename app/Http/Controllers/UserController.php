@@ -31,9 +31,26 @@ class UserController extends Controller
      */
     public function index(ViewAll $request)
     {
+        $search = $request->query('search');
         $perPage = $request->input('per_page', 20);
 
-        $users = User::paginate($perPage);
+        $users = User::query();
+
+        if ($search) {
+            $users->orWhere('name', 'like', "%{$search}%")
+                ->orWhere('email', 'like', "%{$search}%");
+
+            $users->orWhereHas('clinic', function($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%");
+            });
+
+            $users->orWhereHas('employee', function($query) use ($search) {
+                $query->where('phone', 'like', "%{$search}%")
+                    ->orWhere('type', 'like', "%{$search}%");
+            });
+        }
+
+        $users = $users->simplePaginate($perPage);
 
         return response()->json(array_merge([
             'status' => 'Success',
