@@ -11,6 +11,7 @@ use App\Http\Resources\EmployeeResource;
 use App\Models\Employee;
 use App\Models\Media;
 use App\Traits\HttpResponses;
+use Illuminate\Http\JsonResponse;
 
 
 class EmployeeController extends Controller
@@ -24,6 +25,36 @@ class EmployeeController extends Controller
 
     /**
      * Display a listing of the resource.
+     *
+     * @param ViewAll $request
+     *
+     * @return JsonResponse
+     *
+     * @OA\Get(
+     *     path="/api/employees",
+     *     summary="Get a listing of employees",
+     *     operationId="getEmployeeList",
+     *     tags={"Employees"},
+     *     @OA\Parameter(
+     *         name="per_page",
+     *         in="query",
+     *         description="Number of items per page",
+     *         required=false,
+     *         @OA\Schema(type="integer", format="int32", minimum=1, maximum=100),
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="Success"),
+     *             @OA\Property(property="message", type="string", example="All employees fetched successfully!"),
+     *             @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/EmployeeResource")),
+     *         ),
+     *     ),
+     *     security={
+     *         {"bearerAuth": {}}
+     *     }
+     * )
      */
     public function index(ViewAll $request)
     {
@@ -78,6 +109,58 @@ class EmployeeController extends Controller
 
     /**
      * Store employee and clinic user at once.
+     *
+     * @param Store $request
+     * @return JsonResponse
+     *
+     * @OA\Post(
+     *      path="/api/employees",
+     *      operationId="storeEmployee",
+     *      tags={"Employees"},
+     *      summary="Store a new employee",
+     *      description="Stores a new employee along with clinic user details.",
+     *      @OA\RequestBody(
+     *          required=true,
+     *          description="Employee details",
+     *          @OA\MediaType(
+     *              mediaType="application/x-www-form-urlencoded",
+     *              @OA\Schema(
+     *                  required={"email", "password", "role", "clinic_id"},
+     *                  @OA\Property(property="name", type="string", example="John Doe"),
+     *                  @OA\Property(property="email", type="string", format="email", example="john@example.com"),
+     *                  @OA\Property(property="password", type="string", format="password", example="secret123"),
+     *                  @OA\Property(property="clinic_id", type="integer", example=1),
+     *                  @OA\Property(property="role", type="string", example="employee_role"),
+     *                  @OA\Property(property="description", type="string", example="Employee description"),
+     *                  @OA\Property(property="phone", type="string", example="123456789"),
+     *                  @OA\Property(property="type", type="string", example="employee_type"),
+     *                  @OA\Property(property="is_public", type="boolean", example=true),
+     *                  @OA\Property(property="profile_picture", type="string", example="uuid_of_media_file"),
+     *              )
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Employee created successfully",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="status", type="string", example="Success"),
+     *              @OA\Property(property="message", type="string", example="Employee created successfully!"),
+     *              @OA\Property(property="data", type="object", ref="#/components/schemas/EmployeeResource"),
+     *          ),
+     *      ),
+     *      @OA\Response(
+     *          response=422,
+     *          description="Unprocessable Entity - Validation error",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="error", type="string", example="Validation error"),
+     *              @OA\Property(property="message", type="string", example="The given data was invalid."),
+     *              @OA\Property(property="errors", type="object", example={"email": {"The email field is required."}})
+     *          ),
+     *      ),
+     *      security={
+     *         {"bearerAuth": {}}
+     *     }
+     * )
      */
     public function store(Store $request)
     {
@@ -108,6 +191,44 @@ class EmployeeController extends Controller
 
     /**
      * Display the specified resource.
+     *
+     * @param View $request
+     * @param Employee $employee
+     * @return JsonResponse
+     *
+     * @OA\Get(
+     *      path="/api/employees/{employee}",
+     *      operationId="showEmployee",
+     *      tags={"Employees"},
+     *      summary="Get a Specific Employee",
+     *      description="Displays information about a specific employee.",
+     *      @OA\Parameter(
+     *          name="employee",
+     *          in="path",
+     *          required=true,
+     *          description="ID of the employee",
+     *          @OA\Schema(type="integer"),
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Employee fetched successfully",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="status", type="string", example="Success"),
+     *              @OA\Property(property="message", type="string", example="Employee fetched successfully!"),
+     *              @OA\Property(property="data", type="object", ref="#/components/schemas/EmployeeResource"),
+     *          ),
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Not Found - Employee not found",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="error", type="string", example="Employee not found"),
+     *          ),
+     *      ),
+     *      security={
+     *         {"bearerAuth": {}}
+     *     }
+     * )
      */
     public function show(View $request, Employee $employee)
     {
@@ -116,6 +237,63 @@ class EmployeeController extends Controller
 
     /**
      * Update the specified resource in storage.
+     *
+     * @param Update $request
+     * @param Employee $employee
+     * @return JsonResponse
+     *
+     * @OA\Patch(
+     *      path="/api/employees/{employee}",
+     *      operationId="updateEmployee",
+     *      tags={"Employees"},
+     *      summary="Update an Employee",
+     *      description="Updates information about a specific employee.",
+     *      @OA\Parameter(
+     *          name="employee",
+     *          in="path",
+     *          required=true,
+     *          description="ID of the employee",
+     *          @OA\Schema(type="integer"),
+     *      ),
+     *      @OA\RequestBody(
+     *          required=true,
+     *          description="Employee details",
+     *          @OA\MediaType(
+     *              mediaType="application/x-www-form-urlencoded",
+     *              @OA\Schema(
+     *                  @OA\Property(property="description", type="string", example="Updated description"),
+     *                  @OA\Property(property="phone", type="string", example="987654321"),
+     *                  @OA\Property(property="type", type="string", example="updated_employee_type"),
+     *                  @OA\Property(property="is_public", type="boolean", example=false),
+     *                  @OA\Property(property="profile_picture", type="string", example="uuid_of_media_file"),
+     *                  @OA\Property(property="name", type="string", example="Updated John Doe"),
+     *                  @OA\Property(property="email", type="string", format="email", example="updated_john@example.com"),
+     *                  @OA\Property(property="password", type="string", format="password", example="updated_secret123"),
+     *                  @OA\Property(property="role", type="string", example="updated_role"),
+     *                  @OA\Property(property="clinic_id", type="integer", example=1),
+     *              )
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Employee successfully updated",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="status", type="string", example="Success"),
+     *              @OA\Property(property="message", type="string", example="Employee successfully updated!"),
+     *              @OA\Property(property="data", type="object", ref="#/components/schemas/EmployeeResource"),
+     *          ),
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Not Found - Employee not found",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="error", type="string", example="Employee not found"),
+     *          ),
+     *      ),
+     *      security={
+     *         {"bearerAuth": {}}
+     *     }
+     * )
      */
     public function update(Update $request, Employee $employee)
     {
@@ -145,11 +323,47 @@ class EmployeeController extends Controller
         $employee->refresh();
 
         return $this->success(new EmployeeResource($employee), 'Employee successfully updated!');
-
     }
 
     /**
      * Remove the specified resource from storage.
+     *
+     * @param Delete $request
+     * @param Employee $employee
+     * @return JsonResponse
+     *
+     * @OA\Delete(
+     *      path="/api/employees/{employee}",
+     *      operationId="deleteEmployee",
+     *      tags={"Employees"},
+     *      summary="Delete an Employee",
+     *      description="Deletes a specific employee and associated media files.",
+     *      @OA\Parameter(
+     *          name="employee",
+     *          in="path",
+     *          required=true,
+     *          description="ID of the employee",
+     *          @OA\Schema(type="integer"),
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Employee successfully deleted",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="status", type="string", example="Success"),
+     *              @OA\Property(property="message", type="string", example="Employee successfully deleted!"),
+     *          ),
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Not Found - Employee not found",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="error", type="string", example="Employee not found"),
+     *          ),
+     *      ),
+     *      security={
+     *         {"bearerAuth": {}}
+     *     }
+     * )
      */
     public function destroy(Delete $request, Employee $employee)
     {
